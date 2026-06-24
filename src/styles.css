@@ -90,7 +90,7 @@ button {
   color: #ffb703;
 }
 
-/* Distinctive wordmark logo — elegant display serif with a navy gradient */
+/* Wordmark logo — elegant display serif in the app's plain navy */
 .wordmark {
   font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
   font-style: italic;
@@ -98,26 +98,8 @@ button {
   font-size: 32px;
   letter-spacing: -1px;
   line-height: 1;
-  display: inline-flex;
-  align-items: baseline;
-  background: linear-gradient(135deg, var(--navy) 0%, #3b54c4 55%, #6f86e8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--navy);
   padding-right: 2px;
-}
-/* A small gold accent dot, like a period after the mark */
-.wordmark::after {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #ffb703;
-  -webkit-text-fill-color: #ffb703;
-  margin-left: 3px;
-  align-self: flex-end;
-  margin-bottom: 4px;
 }
 
 .topbar .icon-btn {
