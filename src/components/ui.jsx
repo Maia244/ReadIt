@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { scoreColor } from '../data/constants.js'
 
 export function ScoreBadge({ score, sm }) {
@@ -9,15 +10,18 @@ export function ScoreBadge({ score, sm }) {
 }
 
 export function Cover({ book, w = 46, h = 68, showText = true }) {
-  // Real cover art when the API provides it; otherwise a coloured spine with
-  // the title/author so every book still looks distinct.
-  if (book.coverUrl) {
+  const [failed, setFailed] = useState(false)
+
+  // Real cover art when available; on a missing/broken image fall back to a
+  // coloured spine with the title/author so every book still looks distinct.
+  if (book.coverUrl && !failed) {
     return (
       <img
         className="cover img"
         src={book.coverUrl}
-        alt={book.title}
+        alt={`${book.title} cover`}
         loading="lazy"
+        onError={() => setFailed(true)}
         style={{ width: w, height: h, background: book.cover }}
       />
     )

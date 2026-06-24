@@ -55,7 +55,7 @@ function mapDoc(doc) {
     age: matchRules(subjects, AGE_RULES, 'Adult'),
     year: doc.first_publish_year || null,
     cover: hashColor(doc.title || 'book'),
-    coverUrl: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : null,
+    coverUrl: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg?default=false` : null,
   }
 }
 
