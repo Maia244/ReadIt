@@ -1,0 +1,22 @@
+{
+  "name": "lit",
+  "private": true,
+  "version": "1.0.0",
+  "description": "lit — a Beli-style book rating app that ranks books by genre and age group",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "playwright-core": "^1.61.1",
+    "vite": "^5.4.2"
+  }
+}
