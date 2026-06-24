@@ -1,19 +1,19 @@
 :root {
-  /* Beli brand palette */
-  --teal: #0b6b5e;
-  --teal-dark: #084f45;
-  --teal-soft: #e6f2ef;
-  --ink: #11201d;
-  --muted: #6b7b78;
-  --line: #eceeed;
+  /* Navy-blue brand palette */
+  --navy: #1b2a6b;
+  --navy-dark: #111a47;
+  --navy-soft: #eaedf8;
+  --ink: #14182b;
+  --muted: #6b7280;
+  --line: #ececf1;
   --bg: #ffffff;
-  --bg-soft: #f6f7f7;
+  --bg-soft: #f5f6fa;
 
   --good: #18a957; /* green  – high scores */
   --ok: #f2a43a; /* amber  – middling   */
   --bad: #e8503a; /* red    – low scores */
 
-  --shadow: 0 1px 2px rgba(17, 32, 29, 0.06), 0 8px 24px rgba(17, 32, 29, 0.06);
+  --shadow: 0 1px 2px rgba(20, 24, 43, 0.06), 0 8px 24px rgba(20, 24, 43, 0.06);
 }
 
 * {
@@ -80,7 +80,7 @@ button {
   font-weight: 800;
   font-size: 23px;
   letter-spacing: -0.8px;
-  color: var(--teal);
+  color: var(--navy);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -90,8 +90,38 @@ button {
   color: #ffb703;
 }
 
+/* Distinctive wordmark logo — elegant display serif with a navy gradient */
+.wordmark {
+  font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 32px;
+  letter-spacing: -1px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  background: linear-gradient(135deg, var(--navy) 0%, #3b54c4 55%, #6f86e8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  padding-right: 2px;
+}
+/* A small gold accent dot, like a period after the mark */
+.wordmark::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffb703;
+  -webkit-text-fill-color: #ffb703;
+  margin-left: 3px;
+  align-self: flex-end;
+  margin-bottom: 4px;
+}
+
 .topbar .icon-btn {
-  color: var(--teal);
+  color: var(--navy);
   font-size: 20px;
   width: 38px;
   height: 38px;
@@ -101,7 +131,7 @@ button {
 }
 
 .topbar .icon-btn:active {
-  background: var(--teal-soft);
+  background: var(--navy-soft);
 }
 
 /* Feed "Following / For You" toggle, à la Beli */
@@ -133,7 +163,7 @@ button {
   bottom: -1px;
   height: 3px;
   border-radius: 3px;
-  background: var(--teal);
+  background: var(--navy);
 }
 
 .screen-title {
@@ -262,8 +292,8 @@ button {
 .tag {
   font-size: 11px;
   font-weight: 600;
-  color: var(--teal);
-  background: var(--teal-soft);
+  color: var(--navy);
+  background: var(--navy-soft);
   padding: 3px 8px;
   border-radius: 999px;
 }
@@ -308,7 +338,7 @@ button {
   font-size: 11px;
 }
 .segment button.active {
-  background: var(--teal);
+  background: var(--navy);
   color: #fff;
 }
 .segment button.active .count {
@@ -430,10 +460,10 @@ button {
   place-items: center;
 }
 .tabbar button.active {
-  color: var(--teal);
+  color: var(--navy);
 }
 .tabbar .add {
-  background: var(--teal);
+  background: var(--navy);
   color: #fff;
   width: 52px;
   height: 52px;
@@ -443,7 +473,7 @@ button {
   font-size: 30px;
   font-weight: 300;
   margin-top: -20px;
-  box-shadow: 0 6px 16px rgba(11, 107, 94, 0.4);
+  box-shadow: 0 6px 16px rgba(27, 42, 107, 0.4);
   flex: 0 0 auto;
 }
 
@@ -465,7 +495,7 @@ button {
   outline: none;
 }
 .search-input:focus {
-  border-color: var(--teal);
+  border-color: var(--navy);
   background: #fff;
 }
 
@@ -485,7 +515,7 @@ button {
   color: #fff;
   font-size: 30px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  background: linear-gradient(135deg, var(--navy), var(--navy-dark));
 }
 .profile-head h2 {
   margin: 0;
@@ -541,7 +571,7 @@ button {
 }
 .bar-fill {
   height: 100%;
-  background: var(--teal);
+  background: var(--navy);
   border-radius: 999px;
 }
 .bar-row .bn {
@@ -678,8 +708,8 @@ button {
   gap: 10px;
 }
 .versus .vs-card:active {
-  border-color: var(--teal);
-  background: var(--teal-soft);
+  border-color: var(--navy);
+  background: var(--navy-soft);
 }
 .versus .vs-card .vt {
   font-weight: 700;
@@ -710,7 +740,7 @@ button {
   background: var(--line);
 }
 .progress-dots span.on {
-  background: var(--teal);
+  background: var(--navy);
 }
 
 .btn {
@@ -719,19 +749,19 @@ button {
   border-radius: 14px;
   font-weight: 800;
   font-size: 16px;
-  background: var(--teal);
+  background: var(--navy);
   color: #fff;
 }
 .btn:active {
-  background: var(--teal-dark);
+  background: var(--navy-dark);
 }
 .btn.ghost {
   background: var(--bg-soft);
   color: var(--ink);
 }
 .btn.added {
-  background: var(--teal-soft);
-  color: var(--teal);
+  background: var(--navy-soft);
+  color: var(--navy);
 }
 
 .note-input {
@@ -746,7 +776,7 @@ button {
   outline: none;
 }
 .note-input:focus {
-  border-color: var(--teal);
+  border-color: var(--navy);
 }
 
 .result-score {
@@ -783,7 +813,7 @@ button {
   place-items: center;
 }
 .add-actions button.want.on {
-  background: var(--teal-soft);
+  background: var(--navy-soft);
 }
 
 /* ---- Book detail + AI consensus ---- */
@@ -793,9 +823,26 @@ button {
   align-items: flex-start;
   margin-bottom: 16px;
 }
+.about {
+  margin-bottom: 14px;
+}
+.about-head {
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.about-text {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.about-text.muted-text {
+  color: var(--muted);
+}
 .consensus {
-  background: var(--teal-soft);
-  border: 1px solid #cfe7e1;
+  background: var(--navy-soft);
+  border: 1px solid #ccd3ee;
   border-radius: 16px;
   padding: 14px 16px;
   margin-bottom: 16px;
@@ -806,10 +853,10 @@ button {
   gap: 8px;
   font-weight: 800;
   font-size: 14px;
-  color: var(--teal-dark);
+  color: var(--navy-dark);
 }
 .ai-pill {
-  background: var(--teal);
+  background: var(--navy);
   color: #fff;
   font-size: 11px;
   font-weight: 800;

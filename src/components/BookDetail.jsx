@@ -1,19 +1,38 @@
+import { useEffect, useState } from 'react'
 import { SEED_FEED } from '../data/seed.js'
 import { useStore, actions } from '../data/store.js'
 import { getReviews, getConsensus } from '../data/consensus.js'
+import { getSummary } from '../data/summaries.js'
+import { fetchDescription } from '../data/booksApi.js'
 import { Cover, ScoreBadge } from './ui.jsx'
 import { IconBookmark } from './icons.jsx'
 
 const toneLabel = { pos: 'Loved it', mixed: 'It was okay', neg: 'Not for me' }
 
-// Book detail sheet: the AI community consensus ("democracy of all voices")
-// up top, followed by the individual reviews it was distilled from.
+// Book detail sheet: a summary of the book, then the AI community consensus
+// ("democracy of all voices"), then the individual reviews behind it.
 export default function BookDetail({ book, onClose, onRank }) {
   const want = useStore((s) => s.want)
   const read = useStore((s) => s.read)
 
   const reviews = getReviews(book.id)
   const consensus = getConsensus(book.id, reviews)
+
+  // "About this book": curated summary for built-in books, else fetched live
+  // from Open Library for API books.
+  const seedSummary = getSummary(book.id)
+  const [summary, setSummary] = useState(seedSummary)
+  const [summaryLoading, setSummaryLoading] = useState(false)
+  useEffect(() => {
+    if (seedSummary || !book.id.startsWith('ol:')) return
+    const ctrl = new AbortController()
+    setSummaryLoading(true)
+    fetchDescription(book.id, ctrl.signal)
+      .then((d) => setSummary(d))
+      .catch(() => {})
+      .finally(() => setSummaryLoading(false))
+    return () => ctrl.abort()
+  }, [book.id, seedSummary])
 
   // Community score: the user's own rank plus friends' feed scores.
   const mine = read.find((r) => r.id === book.id)
@@ -47,6 +66,17 @@ export default function BookDetail({ book, onClose, onRank }) {
           </div>
         </div>
 
+        {(summary || summaryLoading) && (
+          <div className="about">
+            <div className="about-head">About this book</div>
+            {summary ? (
+              <p className="about-text">{summary}</p>
+            ) : (
+              <p className="about-text muted-text">Loading summary…</p>
+            )}
+          </div>
+        )}
+
         {consensus && (
           <div className="consensus">
             <div className="consensus-head">
@@ -75,7 +105,7 @@ export default function BookDetail({ book, onClose, onRank }) {
               }
             }}
           >
-            <IconBookmark width={22} height={22} style={{ fill: onWant ? 'var(--teal)' : 'none', color: 'var(--teal)' }} />
+            <IconBookmark width={22} height={22} style={{ fill: onWant ? 'var(--navy)' : 'none', color: 'var(--navy)' }} />
           </button>
         </div>
 

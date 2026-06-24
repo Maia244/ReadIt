@@ -59,6 +59,21 @@ function mapDoc(doc) {
   }
 }
 
+// Fetch a book's "about" description from Open Library's work record.
+// API book ids look like 'ol:/works/OL12345W'; returns a string or null.
+export async function fetchDescription(id, signal) {
+  if (!id || !id.startsWith('ol:/works/')) return null
+  const key = id.slice(3) // strip 'ol:' -> '/works/OL...W'
+  const res = await fetch(`https://openlibrary.org${key}.json`, { signal })
+  if (!res.ok) return null
+  const data = await res.json()
+  const d = data.description
+  const text = typeof d === 'string' ? d : d && d.value
+  if (!text) return null
+  // Strip Open Library's trailing source/citation lines for a cleaner blurb.
+  return text.split(/\n+|\(\[source/)[0].trim()
+}
+
 // Search Open Library. Resolves to a list of mapped books, or throws on
 // network/HTTP failure so the caller can fall back to the local catalogue.
 export async function searchBooks(query, signal) {

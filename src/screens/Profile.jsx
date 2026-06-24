@@ -52,7 +52,7 @@ export default function Profile({ onAdd, onOpenBook }) {
   return (
     <div className="screen">
       <div className="topbar">
-        <div className="brand">lit</div>
+        <div className="wordmark">lit</div>
         <button
           className="icon-btn"
           title="Settings"

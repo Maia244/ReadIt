@@ -143,7 +143,7 @@ export default function Search({ onAdd, onOpenBook }) {
                             }
                           }}
                         >
-                          <IconBookmark width={20} height={20} style={{ fill: onWant ? 'var(--teal)' : 'none' }} />
+                          <IconBookmark width={20} height={20} style={{ fill: onWant ? 'var(--navy)' : 'none' }} />
                         </button>
                         <button
                           className="btn"
