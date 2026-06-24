@@ -72,15 +72,21 @@ export default function RankFlow({ book, onClose }) {
 
         {step === 'sentiment' && (
           <>
-            <h3>How was it?</h3>
-            <div className="sub">
-              {book.title} · {book.author}
+            <div className="rank-book-head">
+              <Cover book={book} w={46} h={68} />
+              <div style={{ minWidth: 0 }}>
+                <h3 style={{ margin: 0 }}>How was it?</h3>
+                <div className="sub" style={{ margin: '2px 0 0' }}>
+                  {book.title} · {book.author}
+                </div>
+              </div>
             </div>
             <div className="sentiment-btns">
               {SENTIMENTS.map((s) => (
                 <button key={s.key} className={s.tone} onClick={() => chooseSentiment(s)}>
                   <span className={`sent-dot ${s.tone}`} />
-                  {s.label}
+                  <span className="sent-label">{s.label}</span>
+                  <span className="chev">›</span>
                 </button>
               ))}
             </div>

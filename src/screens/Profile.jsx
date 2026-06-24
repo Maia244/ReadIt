@@ -13,7 +13,7 @@ const LIST_TABS = [
 
 // Beli keeps a user's ranked lists on their Profile (Been / Want to Try /
 // Recs), so this screen hosts the segmented lists + a taste-breakdown tab.
-export default function Profile({ onAdd }) {
+export default function Profile({ onAdd, onOpenBook }) {
   const state = useStore()
   const [tab, setTab] = useState('read')
   const [genre, setGenre] = useState(null)
@@ -168,7 +168,7 @@ export default function Profile({ onAdd }) {
                   rank={tab === 'read' ? i + 1 : null}
                   score={tab === 'read' ? e.score : null}
                   note={tab === 'read' ? e.note : null}
-                  onClick={() => onAdd(e.book)}
+                  onClick={() => onOpenBook(e.book)}
                   right={
                     tab === 'want' ? (
                       <button

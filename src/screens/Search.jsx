@@ -9,7 +9,7 @@ import UserSheet from '../components/UserSheet.jsx'
 
 // Search both books and people. Books come live from Open Library (millions
 // of titles); if that can't be reached we fall back to the built-in list.
-export default function Search({ onAdd }) {
+export default function Search({ onAdd, onOpenBook }) {
   const [mode, setMode] = useState('books') // books | people
   const [q, setQ] = useState('')
   const [genre, setGenre] = useState(null)
@@ -126,7 +126,7 @@ export default function Search({ onAdd }) {
                   <BookRow
                     key={b.id}
                     book={b}
-                    onClick={() => onAdd(b)}
+                    onClick={() => onOpenBook(b)}
                     right={
                       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                         <button

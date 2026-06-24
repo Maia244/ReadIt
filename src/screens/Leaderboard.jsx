@@ -6,7 +6,7 @@ import { BookRow } from '../components/ui.jsx'
 
 // A community leaderboard: aggregates your scores + friends' feed scores into
 // a ranked board you can slice by genre and age group.
-export default function Leaderboard({ onAdd }) {
+export default function Leaderboard({ onOpenBook }) {
   const [genre, setGenre] = useState(null)
   const [age, setAge] = useState(null)
   const read = useStore((s) => s.read)
@@ -60,7 +60,7 @@ export default function Leaderboard({ onAdd }) {
           <div className="empty">No ranked books in this slice yet.</div>
         ) : (
           board.map((e, i) => (
-            <BookRow key={e.id} book={e.book} rank={i + 1} score={e.avg} onClick={() => onAdd(e.book)} />
+            <BookRow key={e.id} book={e.book} rank={i + 1} score={e.avg} onClick={() => onOpenBook(e.book)} />
           ))
         )}
       </div>

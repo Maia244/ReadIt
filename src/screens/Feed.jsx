@@ -9,7 +9,7 @@ function actionText(a) {
   return a
 }
 
-export default function Feed() {
+export default function Feed({ onOpenBook }) {
   const feed = useStore((s) => s.feed)
   const [view, setView] = useState('following')
 
@@ -49,7 +49,7 @@ export default function Feed() {
               </div>
               {item.score != null && <ScoreBadge score={item.score} sm />}
             </div>
-            <div className="feed-body">
+            <div className="feed-body" onClick={() => onOpenBook(book)} style={{ cursor: 'pointer' }}>
               <Cover book={book} w={52} h={78} />
               <div>
                 <div className="tags">
