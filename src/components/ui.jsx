@@ -1,8 +1,8 @@
-import { scoreTone } from '../data/constants.js'
+import { scoreColor } from '../data/constants.js'
 
 export function ScoreBadge({ score, sm }) {
   return (
-    <div className={`score ${scoreTone(score)} ${sm ? 'sm' : ''}`}>
+    <div className={`score ${sm ? 'sm' : ''}`} style={{ background: scoreColor(score) }}>
       {score.toFixed(1)}
     </div>
   )

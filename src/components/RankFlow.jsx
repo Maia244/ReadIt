@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { SENTIMENTS, scoreTone } from '../data/constants.js'
+import { SENTIMENTS, scoreColor } from '../data/constants.js'
 import { bandList, actions } from '../data/store.js'
 import { Cover } from './ui.jsx'
 
@@ -124,7 +124,7 @@ export default function RankFlow({ book, onClose }) {
             <h3>Nice — it’s ranked!</h3>
             <div className="sub">{book.title}</div>
             <div className="result-score">
-              <div className={`big`} style={{ color: `var(--${scoreTone(finalScore)})` }}>
+              <div className="big" style={{ color: scoreColor(finalScore) }}>
                 {finalScore.toFixed(1)}
               </div>
               <div className="lbl">Your score · added to “Read”</div>

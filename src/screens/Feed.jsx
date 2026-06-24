@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useStore, getBook } from '../data/store.js'
 import { Cover, ScoreBadge } from '../components/ui.jsx'
+import { IconHeart, IconComment, IconBookmark } from '../components/icons.jsx'
 
 function actionText(a) {
   if (a === 'ranked') return 'ranked'
@@ -15,11 +16,9 @@ export default function Feed() {
   return (
     <div className="screen">
       <div className="topbar">
-        <div className="brand">
-          lit<span className="dot">.</span>
-        </div>
+        <div className="brand">lit</div>
         <button className="icon-btn" title="Notifications">
-          ♡
+          <IconHeart />
         </button>
       </div>
 
@@ -61,9 +60,9 @@ export default function Feed() {
               </div>
             </div>
             <div className="feed-actions">
-              <span>♡ Like</span>
-              <span>💬 Comment</span>
-              <span>＋ Add to list</span>
+              <span><IconHeart width={18} height={18} /> 12</span>
+              <span><IconComment width={18} height={18} /> 3</span>
+              <span style={{ marginLeft: 'auto' }}><IconBookmark width={18} height={18} /></span>
             </div>
           </div>
         )

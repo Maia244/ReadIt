@@ -26,7 +26,7 @@ export default function Search({ onAdd }) {
   return (
     <div className="screen">
       <div className="topbar">
-        <div className="brand">Add a Book</div>
+        <div className="brand">Search</div>
       </div>
 
       <div className="search-wrap">
