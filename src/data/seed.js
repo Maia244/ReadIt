@@ -44,6 +44,23 @@ export const SEED_WANT = ['b1', 'b14', 'b19', 'b23', 'b21']
 
 export const SEED_RECS = ['b8', 'b10', 'b15']
 
+// People you can search for and follow, à la Beli's "Members" search.
+export const PEOPLE = [
+  { id: 'u_maya', name: 'Maya', handle: 'mayareads', avatar: '#ff7b00', bio: 'Sci-fi & fantasy', followers: 1240, ranked: 312, favs: ['b14', 'b2', 'b23'] },
+  { id: 'u_jordan', name: 'Jordan', handle: 'jordanlovesya', avatar: '#2a9d8f', bio: 'YA romance forever', followers: 880, ranked: 204, favs: ['b18', 'b7', 'b13'] },
+  { id: 'u_sam', name: 'Sam', handle: 'samspages', avatar: '#9c6644', bio: 'Epic fantasy nerd', followers: 642, ranked: 158, favs: ['b1', 'b23', 'b12'] },
+  { id: 'u_priya', name: 'Priya', handle: 'priyareads', avatar: '#7209b7', bio: 'Literary fiction', followers: 2110, ranked: 421, favs: ['b8', 'b3', 'b5'] },
+  { id: 'u_alex', name: 'Alex', handle: 'alexturnspages', avatar: '#1d3557', bio: 'Thriller junkie', followers: 530, ranked: 142, favs: ['b4', 'b11', 'b24'] },
+  { id: 'u_nina', name: 'Nina', handle: 'ninanovels', avatar: '#e63946', bio: 'Romance + a little spice', followers: 1760, ranked: 388, favs: ['b13', 'b18', 'b3'] },
+  { id: 'u_leo', name: 'Leo', handle: 'leoreadshistory', avatar: '#457b9d', bio: 'Non-fiction & history', followers: 410, ranked: 97, favs: ['b19', 'b10', 'b15'] },
+  { id: 'u_zoe', name: 'Zoe', handle: 'zoezone', avatar: '#52b788', bio: 'Middle-grade magic', followers: 690, ranked: 176, favs: ['b6', 'b22', 'b16'] },
+  { id: 'u_theo', name: 'Theo', handle: 'theonightowl', avatar: '#3a0ca3', bio: 'Horror after dark', followers: 305, ranked: 88, favs: ['b20', 'b24', 'b11'] },
+  { id: 'u_iris', name: 'Iris', handle: 'irisink', avatar: '#bc6c25', bio: 'Poetry & classics', followers: 920, ranked: 233, favs: ['b12', 'b8', 'b5'] },
+]
+
+// You already follow the friends whose activity shows up in your feed.
+export const SEED_FOLLOWING = ['u_maya', 'u_jordan', 'u_sam', 'u_priya']
+
 // Social feed of friends' recent activity.
 export const SEED_FEED = [
   { id: 'f1', user: 'Maya', avatar: '#ff7b00', action: 'ranked', bookId: 'b14', score: 9.2, time: '2h', comment: 'Finally finished Dune — worth every page.' },

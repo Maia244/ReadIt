@@ -605,8 +605,20 @@ button {
   background: #fff;
   text-align: left;
 }
-.sentiment-btns button .em {
-  font-size: 24px;
+.sentiment-btns button .sent-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.sent-dot.good {
+  background: var(--good);
+}
+.sent-dot.ok {
+  background: var(--ok);
+}
+.sent-dot.bad {
+  background: var(--bad);
 }
 .sentiment-btns button.good {
   border-color: #bfe6cd;
@@ -762,4 +774,37 @@ button {
 
 .search-results .row:last-child {
   border-bottom: none;
+}
+
+/* ---- User mini-profile sheet ---- */
+.avatar.lg {
+  width: 60px;
+  height: 60px;
+  font-size: 26px;
+}
+.user-sheet-head {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.user-bio {
+  font-size: 14px;
+  color: var(--ink);
+  margin-top: 4px;
+}
+.user-stats {
+  display: flex;
+  gap: 28px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.user-stats b {
+  color: var(--ink);
+  font-size: 16px;
+  margin-right: 3px;
 }

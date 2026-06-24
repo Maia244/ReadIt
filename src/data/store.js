@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { CATALOG, SEED_READ, SEED_WANT, SEED_RECS, SEED_FEED } from './seed.js'
+import { CATALOG, PEOPLE, SEED_READ, SEED_WANT, SEED_RECS, SEED_FEED, SEED_FOLLOWING } from './seed.js'
 
 const KEY = 'lit.state.v1'
 
@@ -17,13 +17,14 @@ function defaultState() {
     want: [...SEED_WANT],
     recs: [...SEED_RECS],
     feed: [...SEED_FEED],
+    following: [...SEED_FOLLOWING],
   }
 }
 
 function load() {
   try {
     const raw = localStorage.getItem(KEY)
-    if (raw) return JSON.parse(raw)
+    if (raw) return { ...defaultState(), ...JSON.parse(raw) } // merge in new keys
   } catch (e) {
     /* ignore corrupt storage */
   }
@@ -51,9 +52,14 @@ function rescore(read) {
 }
 
 export const catalogById = Object.fromEntries(CATALOG.map((b) => [b.id, b]))
+const peopleById = Object.fromEntries(PEOPLE.map((p) => [p.id, p]))
 
 export function getBook(id) {
   return catalogById[id]
+}
+
+export function getUser(id) {
+  return peopleById[id]
 }
 
 // Shared singleton so every screen sees the same state without a context tree.
@@ -81,6 +87,12 @@ export const actions = {
   },
   removeFromWant(id) {
     commit({ ...state, want: state.want.filter((w) => w !== id) })
+  },
+  toggleFollow(userId) {
+    const following = state.following.includes(userId)
+      ? state.following.filter((u) => u !== userId)
+      : [userId, ...state.following]
+    commit({ ...state, following })
   },
   // Insert a freshly compared book at `index` within its sentiment band and
   // recompute the whole list's scores.

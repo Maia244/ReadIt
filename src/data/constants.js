@@ -24,9 +24,9 @@ export const AGE_GROUPS = [
 
 // Beli-style sentiment buckets used to seed the ranking flow.
 export const SENTIMENTS = [
-  { key: 'liked', label: 'I liked it!', emoji: '😍', tone: 'good' },
-  { key: 'fine', label: 'It was fine', emoji: '🙂', tone: 'ok' },
-  { key: 'disliked', label: "Didn't like it", emoji: '😒', tone: 'bad' },
+  { key: 'liked', label: 'I liked it!', tone: 'good' },
+  { key: 'fine', label: 'It was fine', tone: 'ok' },
+  { key: 'disliked', label: "Didn't like it", tone: 'bad' },
 ]
 
 // Score buckets map a 0–10 rating to Beli's colour language.

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useStore, getBook, actions } from '../data/store.js'
 import { GENRES, AGE_GROUPS } from '../data/constants.js'
 import { BookRow } from '../components/ui.jsx'
+import { IconGear } from '../components/icons.jsx'
 
 const LIST_TABS = [
   { key: 'read', label: 'Read' },
@@ -59,7 +60,7 @@ export default function Profile({ onAdd }) {
             if (confirm('Reset lit to demo data?')) actions.reset()
           }}
         >
-          ⚙
+          <IconGear />
         </button>
       </div>
 
@@ -67,7 +68,7 @@ export default function Profile({ onAdd }) {
         <div className="big-avatar">M</div>
         <div>
           <h2>Maia</h2>
-          <div className="handle">@maia · 🔖 bookworm</div>
+          <div className="handle">@maia · bookworm</div>
         </div>
       </div>
 
@@ -81,7 +82,7 @@ export default function Profile({ onAdd }) {
           <div className="l">Followers</div>
         </div>
         <div className="stat">
-          <div className="n">186</div>
+          <div className="n">{state.following.length}</div>
           <div className="l">Following</div>
         </div>
       </div>
@@ -155,10 +156,9 @@ export default function Profile({ onAdd }) {
           <div className="rows">
             {entries.length === 0 ? (
               <div className="empty">
-                <span className="e-emoji">📚</span>
                 Nothing here yet.
                 <br />
-                Tap ＋ to add a book.
+                Add a book from Search to see it here.
               </div>
             ) : (
               entries.map((e, i) => (
@@ -184,7 +184,7 @@ export default function Profile({ onAdd }) {
                         style={{ width: 'auto', padding: '8px 14px', fontSize: 13 }}
                         onClick={(ev) => { ev.stopPropagation(); actions.addToWant(e.book.id) }}
                       >
-                        ＋ Want
+                        + Want
                       </button>
                     ) : null
                   }

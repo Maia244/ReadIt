@@ -79,7 +79,7 @@ export default function RankFlow({ book, onClose }) {
             <div className="sentiment-btns">
               {SENTIMENTS.map((s) => (
                 <button key={s.key} className={s.tone} onClick={() => chooseSentiment(s)}>
-                  <span className="em">{s.emoji}</span>
+                  <span className={`sent-dot ${s.tone}`} />
                   {s.label}
                 </button>
               ))}

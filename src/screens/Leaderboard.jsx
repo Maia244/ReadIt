@@ -57,10 +57,7 @@ export default function Leaderboard({ onAdd }) {
 
       <div className="rows">
         {board.length === 0 ? (
-          <div className="empty">
-            <span className="e-emoji">🏆</span>
-            No ranked books in this slice yet.
-          </div>
+          <div className="empty">No ranked books in this slice yet.</div>
         ) : (
           board.map((e, i) => (
             <BookRow key={e.id} book={e.book} rank={i + 1} score={e.avg} onClick={() => onAdd(e.book)} />
