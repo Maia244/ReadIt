@@ -1,0 +1,8 @@
+{
+  "appId": "com.lit.app",
+  "appName": "lit",
+  "webDir": "dist",
+  "ios": {
+    "contentInset": "automatic"
+  }
+}

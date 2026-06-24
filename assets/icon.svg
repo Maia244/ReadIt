@@ -1,0 +1,28 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="1024" fill="#1b2a6b"/>
+  <!-- open book mark -->
+  <g>
+    <!-- spine shadow -->
+    <rect x="506" y="330" width="12" height="372" rx="6" fill="#0f1740"/>
+    <!-- left page -->
+    <path d="M512 350 C 440 300, 320 300, 250 330 L 250 690 C 320 660, 440 660, 512 700 Z"
+          fill="#ffffff"/>
+    <!-- right page -->
+    <path d="M512 350 C 584 300, 704 300, 774 330 L 774 690 C 704 660, 584 660, 512 700 Z"
+          fill="#eef1fb"/>
+    <!-- text lines, left -->
+    <g stroke="#c3cae8" stroke-width="12" stroke-linecap="round">
+      <line x1="300" y1="392" x2="470" y2="408"/>
+      <line x1="300" y1="442" x2="470" y2="458"/>
+      <line x1="300" y1="492" x2="470" y2="508"/>
+      <line x1="300" y1="542" x2="440" y2="556"/>
+    </g>
+    <!-- text lines, right -->
+    <g stroke="#c3cae8" stroke-width="12" stroke-linecap="round">
+      <line x1="554" y1="408" x2="724" y2="392"/>
+      <line x1="554" y1="458" x2="724" y2="442"/>
+      <line x1="554" y1="508" x2="724" y2="492"/>
+      <line x1="584" y1="556" x2="724" y2="542"/>
+    </g>
+  </g>
+</svg>
