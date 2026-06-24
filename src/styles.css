@@ -206,6 +206,14 @@ button {
   inset: 0;
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.18));
 }
+.cover.img {
+  object-fit: cover;
+  display: block;
+  padding: 0;
+}
+.cover.img::after {
+  display: none;
+}
 
 /* ---- List rows ---- */
 .rows {
@@ -774,6 +782,20 @@ button {
 
 .search-results .row:last-child {
   border-bottom: none;
+}
+.list-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 4px 18px 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.list-label.muted {
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ok);
 }
 
 /* ---- User mini-profile sheet ---- */

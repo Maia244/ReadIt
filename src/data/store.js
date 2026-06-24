@@ -18,6 +18,7 @@ function defaultState() {
     recs: [...SEED_RECS],
     feed: [...SEED_FEED],
     following: [...SEED_FOLLOWING],
+    books: {}, // id -> book record for any non-catalog (API) book the user touches
   }
 }
 
@@ -54,8 +55,10 @@ function rescore(read) {
 export const catalogById = Object.fromEntries(CATALOG.map((b) => [b.id, b]))
 const peopleById = Object.fromEntries(PEOPLE.map((p) => [p.id, p]))
 
+// Resolve a book by id from the built-in catalogue first, then from the
+// cache of API books the user has saved/ranked.
 export function getBook(id) {
-  return catalogById[id]
+  return catalogById[id] || (state.books && state.books[id])
 }
 
 export function getUser(id) {
@@ -77,6 +80,11 @@ function commit(next) {
 }
 
 export const actions = {
+  // Persist an API book's metadata so its lists/feed rows resolve later.
+  cacheBook(book) {
+    if (!book || catalogById[book.id] || state.books[book.id]) return
+    commit({ ...state, books: { ...state.books, [book.id]: book } })
+  },
   addToWant(id) {
     if (state.want.includes(id)) return
     commit({
@@ -123,7 +131,7 @@ export const actions = {
 export function bandList(sentiment) {
   return state.read
     .filter((b) => b.sentiment === sentiment)
-    .map((b) => ({ ...b, book: catalogById[b.id] }))
+    .map((b) => ({ ...b, book: getBook(b.id) }))
 }
 
 export function useStore(selector = (s) => s) {

@@ -4,6 +4,7 @@ import Search from './screens/Search.jsx'
 import Leaderboard from './screens/Leaderboard.jsx'
 import Profile from './screens/Profile.jsx'
 import RankFlow from './components/RankFlow.jsx'
+import { actions } from './data/store.js'
 import { IconHome, IconSearch, IconTrophy, IconUser, IconPlus } from './components/icons.jsx'
 
 // Beli's bottom nav: Feed · Search · ＋ · Leaderboard · Profile.
@@ -22,8 +23,12 @@ export default function App() {
 
   // Passing a book opens the ranking sheet; otherwise jump to Search.
   function openAdd(book) {
-    if (book) setRanking(book)
-    else setTab('search')
+    if (book) {
+      actions.cacheBook(book) // persist API books so lists resolve them later
+      setRanking(book)
+    } else {
+      setTab('search')
+    }
   }
 
   return (

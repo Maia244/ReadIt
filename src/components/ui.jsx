@@ -9,6 +9,19 @@ export function ScoreBadge({ score, sm }) {
 }
 
 export function Cover({ book, w = 46, h = 68, showText = true }) {
+  // Real cover art when the API provides it; otherwise a coloured spine with
+  // the title/author so every book still looks distinct.
+  if (book.coverUrl) {
+    return (
+      <img
+        className="cover img"
+        src={book.coverUrl}
+        alt={book.title}
+        loading="lazy"
+        style={{ width: w, height: h, background: book.cover }}
+      />
+    )
+  }
   return (
     <div className="cover" style={{ width: w, height: h, background: book.cover }}>
       {showText && (

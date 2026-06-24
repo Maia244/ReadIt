@@ -1,13 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CATALOG, PEOPLE } from '../data/seed.js'
+import { searchBooks } from '../data/booksApi.js'
 import { useStore, actions } from '../data/store.js'
 import { GENRES, AGE_GROUPS } from '../data/constants.js'
 import { BookRow } from '../components/ui.jsx'
 import { IconBookmark } from '../components/icons.jsx'
 import UserSheet from '../components/UserSheet.jsx'
 
-// Search both books and people (Beli's "Restaurants / Members"). Picking a
-// book opens the ranking flow; people can be followed inline.
+// Search both books and people. Books come live from Open Library (millions
+// of titles); if that can't be reached we fall back to the built-in list.
 export default function Search({ onAdd }) {
   const [mode, setMode] = useState('books') // books | people
   const [q, setQ] = useState('')
@@ -15,14 +16,49 @@ export default function Search({ onAdd }) {
   const [age, setAge] = useState(null)
   const [viewUser, setViewUser] = useState(null)
 
+  const [results, setResults] = useState(CATALOG) // live or fallback book list
+  const [loading, setLoading] = useState(false)
+  const [offline, setOffline] = useState(false)
+
   const want = useStore((s) => s.want)
   const read = useStore((s) => s.read)
   const following = useStore((s) => s.following)
   const readIds = useMemo(() => new Set(read.map((r) => r.id)), [read])
 
-  const bookResults = CATALOG.filter((b) => {
-    const text = `${b.title} ${b.author} ${b.genre}`.toLowerCase()
-    if (q && !text.includes(q.toLowerCase())) return false
+  // Debounced live book search.
+  useEffect(() => {
+    if (mode !== 'books') return
+    const query = q.trim()
+    if (query.length < 2) {
+      setResults(CATALOG)
+      setLoading(false)
+      setOffline(false)
+      return
+    }
+    const ctrl = new AbortController()
+    setLoading(true)
+    const t = setTimeout(async () => {
+      try {
+        const books = await searchBooks(query, ctrl.signal)
+        setResults(books)
+        setOffline(false)
+      } catch (e) {
+        if (e.name === 'AbortError') return
+        // Couldn't reach the live catalogue — search the built-in list instead.
+        const lc = query.toLowerCase()
+        setResults(CATALOG.filter((b) => `${b.title} ${b.author} ${b.genre}`.toLowerCase().includes(lc)))
+        setOffline(true)
+      } finally {
+        setLoading(false)
+      }
+    }, 350)
+    return () => {
+      clearTimeout(t)
+      ctrl.abort()
+    }
+  }, [q, mode])
+
+  const bookResults = results.filter((b) => {
     if (genre && b.genre !== genre) return false
     if (age && b.age !== age) return false
     return true
@@ -42,7 +78,7 @@ export default function Search({ onAdd }) {
       <div className="search-wrap">
         <input
           className="search-input"
-          placeholder={mode === 'books' ? 'Search books, authors, genres' : 'Search people'}
+          placeholder={mode === 'books' ? 'Search any book, author or genre' : 'Search people'}
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />
@@ -74,8 +110,13 @@ export default function Search({ onAdd }) {
             ))}
           </div>
 
+          {q.trim().length < 2 && <div className="list-label">Popular on lit</div>}
+          {offline && <div className="list-label muted">Showing built-in results — couldn’t reach the live catalogue</div>}
+
           <div className="rows search-results">
-            {bookResults.length === 0 ? (
+            {loading ? (
+              <div className="empty">Searching…</div>
+            ) : bookResults.length === 0 ? (
               <div className="empty">No books match your search.</div>
             ) : (
               bookResults.map((b) => {
@@ -90,18 +131,19 @@ export default function Search({ onAdd }) {
                       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                         <button
                           className={`btn ghost ${onWant ? 'added' : ''}`}
-                          style={{ width: 44, height: 44, padding: 0, fontSize: 18, flex: '0 0 auto' }}
+                          style={{ width: 44, height: 44, padding: 0, flex: '0 0 auto' }}
                           title="Want to read"
                           onClick={(ev) => {
                             ev.stopPropagation()
-                            onWant ? actions.removeFromWant(b.id) : actions.addToWant(b.id)
+                            if (onWant) {
+                              actions.removeFromWant(b.id)
+                            } else {
+                              actions.cacheBook(b)
+                              actions.addToWant(b.id)
+                            }
                           }}
                         >
-                          <IconBookmark
-                            width={20}
-                            height={20}
-                            style={{ fill: onWant ? 'var(--teal)' : 'none' }}
-                          />
+                          <IconBookmark width={20} height={20} style={{ fill: onWant ? 'var(--teal)' : 'none' }} />
                         </button>
                         <button
                           className="btn"
