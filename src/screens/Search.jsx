@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CATALOG, PEOPLE } from '../data/seed.js'
 import { searchBooks } from '../data/booksApi.js'
-import { useStore, actions, bookRankings } from '../data/store.js'
+import { useStore, actions, bookRankings, getBook } from '../data/store.js'
 import { GENRES, AGE_GROUPS, scoreColor } from '../data/constants.js'
 import { BookRow } from '../components/ui.jsx'
 import { IconBookmark } from '../components/icons.jsx'
@@ -59,11 +59,29 @@ export default function Search({ onAdd, onOpenBook }) {
     }
   }, [q, mode])
 
-  const bookResults = results.filter((b) => {
-    if (genre && b.genre !== genre) return false
-    if (age && b.age !== age) return false
-    return true
-  })
+  // Rank of each scored book *within its genre* (consensus, high → low).
+  const genreRanks = useMemo(() => {
+    const byGenre = {}
+    for (const [id, r] of Object.entries(rankings)) {
+      const bk = getBook(id)
+      if (!bk?.genre) continue
+      ;(byGenre[bk.genre] ||= []).push({ id, score: r.score })
+    }
+    const map = {}
+    for (const arr of Object.values(byGenre)) {
+      arr.sort((a, b) => b.score - a.score).forEach((e, i) => { map[e.id] = i + 1 })
+    }
+    return map
+  }, [rankings])
+
+  // Filter, then sort by consensus rating high → low (unrated fall to the end).
+  const bookResults = useMemo(() => {
+    const scoreOf = (b) => (rankings[b.id] ? rankings[b.id].score : -1)
+    return results
+      .filter((b) => (!genre || b.genre === genre) && (!age || b.age === age))
+      .slice()
+      .sort((a, b) => scoreOf(b) - scoreOf(a))
+  }, [results, genre, age, rankings])
 
   const peopleResults = PEOPLE.filter((p) => {
     const text = `${p.name} ${p.handle} ${p.bio}`.toLowerCase()
@@ -131,7 +149,9 @@ export default function Search({ onAdd, onOpenBook }) {
                     onClick={() => onOpenBook(b)}
                     stat={
                       rk ? (
-                        <span>#{rk.rank} overall</span>
+                        <span>
+                          {genre ? `#${genreRanks[b.id] ?? '–'} in ${b.genre}` : `#${rk.rank} overall`}
+                        </span>
                       ) : (
                         <span className="rowstat-muted">Not ranked yet</span>
                       )
