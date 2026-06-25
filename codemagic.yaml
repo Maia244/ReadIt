@@ -1,0 +1,48 @@
+# Codemagic CI/CD — builds, signs, and uploads lit to the App Store with no Mac.
+# Docs: https://docs.codemagic.io/yaml-quick-start/building-a-native-ios-app/
+#
+# Before your first build, in the Codemagic UI you must:
+#   1. Add an App Store Connect API key under Teams/Personal > Integrations >
+#      Developer Portal, and name it EXACTLY "lit App Store" (or change the
+#      name below to match).
+#   2. That's it — signing certificates and provisioning profiles are created
+#      automatically from the API key. You never touch a Mac.
+
+workflows:
+  ios-release:
+    name: lit iOS release
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      app_store_connect: lit App Store        # <- must match the API key name in Codemagic
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.lit.app          # <- your bundle id (also register it in App Store Connect)
+      vars:
+        XCODE_PROJECT: "ios/App/App.xcodeproj"
+        XCODE_SCHEME: "App"
+      node: 20
+      xcode: latest
+    scripts:
+      - name: Install npm dependencies
+        script: npm ci
+      - name: Build the web app
+        script: npm run build
+      - name: Sync Capacitor iOS project
+        script: npx cap sync ios
+      - name: Set up code signing
+        script: xcode-project use-profiles
+      - name: Build the iOS app (.ipa)
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true            # uploads to TestFlight automatically
+        # submit_to_app_store: false          # flip to true once your listing is ready
