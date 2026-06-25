@@ -108,14 +108,14 @@ export default function Search({ onAdd, onOpenBook, focusSignal }) {
             <button className={`chip ${!genre && !age ? 'active' : ''}`} onClick={() => { setGenre(null); setAge(null) }}>
               All
             </button>
-            {AGE_GROUPS.map((a) => (
-              <button key={a} className={`chip ${age === a ? 'active' : ''}`} onClick={() => setAge(age === a ? null : a)}>
-                {a}
-              </button>
-            ))}
             {GENRES.map((g) => (
               <button key={g} className={`chip ${genre === g ? 'active' : ''}`} onClick={() => setGenre(genre === g ? null : g)}>
                 {g}
+              </button>
+            ))}
+            {AGE_GROUPS.map((a) => (
+              <button key={a} className={`chip ${age === a ? 'active' : ''}`} onClick={() => setAge(age === a ? null : a)}>
+                {a}
               </button>
             ))}
           </div>
