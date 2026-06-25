@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CATALOG, PEOPLE } from '../data/seed.js'
 import { searchBooks } from '../data/booksApi.js'
 import { useStore, actions } from '../data/store.js'
@@ -9,17 +9,8 @@ import UserSheet from '../components/UserSheet.jsx'
 
 // Search both books and people. Books come live from Open Library (millions
 // of titles); if that can't be reached we fall back to the built-in list.
-export default function Search({ onAdd, onOpenBook, focusSignal }) {
+export default function Search({ onAdd, onOpenBook }) {
   const [mode, setMode] = useState('books') // books | people
-  const inputRef = useRef(null)
-
-  // Focus the search box when arriving via the + button.
-  useEffect(() => {
-    if (focusSignal) {
-      setMode('books')
-      inputRef.current?.focus()
-    }
-  }, [focusSignal])
   const [q, setQ] = useState('')
   const [genre, setGenre] = useState(null)
   const [age, setAge] = useState(null)
@@ -86,7 +77,6 @@ export default function Search({ onAdd, onOpenBook, focusSignal }) {
 
       <div className="search-wrap">
         <input
-          ref={inputRef}
           className="search-input"
           placeholder={mode === 'books' ? 'Search any book, author or genre' : 'Search people'}
           value={q}

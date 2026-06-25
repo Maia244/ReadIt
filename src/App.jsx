@@ -9,13 +9,12 @@ import Login from './screens/Login.jsx'
 import { actions } from './data/store.js'
 import { useAuth } from './auth/AuthContext.jsx'
 import { isFirebaseConfigured } from './auth/firebase.js'
-import { IconHome, IconSearch, IconTrophy, IconUser, IconPlus } from './components/icons.jsx'
+import { IconHome, IconSearch, IconTrophy, IconUser } from './components/icons.jsx'
 
-// Beli's bottom nav: Feed · Search · ＋ · Leaderboard · Profile.
+// Bottom nav: Feed · Search · Leaderboard · Profile.
 const NAV = [
   { key: 'feed', label: 'Feed', Icon: IconHome },
   { key: 'search', label: 'Search', Icon: IconSearch },
-  { key: 'add', center: true },
   { key: 'board', label: 'Leaderboard', Icon: IconTrophy },
   { key: 'profile', label: 'Profile', Icon: IconUser },
 ]
@@ -23,8 +22,6 @@ const NAV = [
 export default function App() {
   const { user, loading } = useAuth()
   const [tab, setTab] = useState('feed')
-  // Bumped each time the + button is tapped, to focus the search box.
-  const [addSignal, setAddSignal] = useState(0)
   // The book currently being ranked (opens the RankFlow sheet).
   const [ranking, setRanking] = useState(null)
   // The book whose detail/consensus sheet is open.
@@ -39,12 +36,6 @@ export default function App() {
     } else {
       setTab('search')
     }
-  }
-
-  // The + button: jump to Search and focus the input ("Add a book").
-  function tapAdd() {
-    setTab('search')
-    setAddSignal((n) => n + 1)
   }
 
   // Tapping a book opens its detail + AI consensus view.
@@ -70,7 +61,7 @@ export default function App() {
   return (
     <div className="phone">
       {tab === 'feed' && <Feed onOpenBook={openBook} />}
-      {tab === 'search' && <Search onAdd={openAdd} onOpenBook={openBook} focusSignal={addSignal} />}
+      {tab === 'search' && <Search onAdd={openAdd} onOpenBook={openBook} />}
       {tab === 'board' && <Leaderboard onOpenBook={openBook} />}
       {tab === 'profile' && <Profile onAdd={openAdd} onOpenBook={openBook} />}
 
@@ -78,24 +69,18 @@ export default function App() {
       {ranking && <RankFlow book={ranking} onClose={() => setRanking(null)} />}
 
       <nav className="tabbar">
-        {NAV.map((n) =>
-          n.center ? (
-            <button key={n.key} className="add" onClick={tapAdd} aria-label="Add a book">
-              <IconPlus />
-            </button>
-          ) : (
-            <button
-              key={n.key}
-              className={tab === n.key ? 'active' : ''}
-              onClick={() => setTab(n.key)}
-            >
-              <span className="ic">
-                <n.Icon />
-              </span>
-              <span>{n.label}</span>
-            </button>
-          ),
-        )}
+        {NAV.map((n) => (
+          <button
+            key={n.key}
+            className={tab === n.key ? 'active' : ''}
+            onClick={() => setTab(n.key)}
+          >
+            <span className="ic">
+              <n.Icon />
+            </span>
+            <span>{n.label}</span>
+          </button>
+        ))}
       </nav>
     </div>
   )
