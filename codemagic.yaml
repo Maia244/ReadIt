@@ -39,12 +39,18 @@ workflows:
         script: npx cap sync ios
       - name: Set up automatic code signing
         script: |
+          set -x
           keychain initialize
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
-            --create
+            --create \
+            --verbose
           keychain add-certificates
-          xcode-project use-profiles
+          echo "=== Signing identities in keychain ==="
+          security find-identity -v -p codesigning || true
+          echo "=== Provisioning profiles present ==="
+          ls -la "$HOME/Library/MobileDevice/Provisioning Profiles/" || true
+          xcode-project use-profiles --verbose
       - name: Build the iOS app (.ipa)
         script: |
           xcode-project build-ipa \
