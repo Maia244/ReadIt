@@ -18,7 +18,7 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.lit.app          # <- your bundle id (also register it in App Store Connect)
+        bundle_identifier: com.maiafrank.lit          # <- your bundle id (also register it in App Store Connect)
       vars:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
