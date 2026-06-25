@@ -1,7 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
 import { CATALOG, PEOPLE, SEED_READ, SEED_WANT, SEED_RECS, SEED_FEED, SEED_FOLLOWING } from './seed.js'
 
-const KEY = 'lit.state.v1'
+// Storage key is scoped per signed-in user so accounts keep separate lists.
+let KEY = 'lit.state.anon'
+function keyFor(uid) {
+  return 'lit.state.' + (uid || 'anon')
+}
 
 // Beli buckets a rating into thirds by sentiment; we keep scores inside
 // the matching band so "I liked it" can never fall below a "fine" book.
@@ -68,6 +72,16 @@ export function getUser(id) {
 // Shared singleton so every screen sees the same state without a context tree.
 let state = load()
 const listeners = new Set()
+
+// Switch the active storage scope when the signed-in user changes, then
+// reload that user's state and notify all screens.
+export function setUserScope(uid) {
+  const next = keyFor(uid)
+  if (next === KEY) return
+  KEY = next
+  state = load()
+  listeners.forEach((fn) => fn(state))
+}
 
 function commit(next) {
   state = next

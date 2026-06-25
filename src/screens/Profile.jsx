@@ -3,6 +3,8 @@ import { useStore, getBook, actions } from '../data/store.js'
 import { GENRES, AGE_GROUPS } from '../data/constants.js'
 import { BookRow } from '../components/ui.jsx'
 import { IconGear } from '../components/icons.jsx'
+import { useAuth } from '../auth/AuthContext.jsx'
+import { signOut, deleteAccount, isFirebaseConfigured } from '../auth/firebase.js'
 
 const LIST_TABS = [
   { key: 'read', label: 'Read' },
@@ -15,9 +17,22 @@ const LIST_TABS = [
 // Recs), so this screen hosts the segmented lists + a taste-breakdown tab.
 export default function Profile({ onAdd, onOpenBook }) {
   const state = useStore()
+  const { user } = useAuth()
   const [tab, setTab] = useState('read')
   const [genre, setGenre] = useState(null)
   const [age, setAge] = useState(null)
+
+  const displayName = user?.displayName || (user?.email ? user.email.split('@')[0] : 'Reader')
+  const handle = user?.email || '@reader'
+
+  async function handleDelete() {
+    if (!confirm('Delete your account and all your lists? This cannot be undone.')) return
+    try {
+      await deleteAccount()
+    } catch (e) {
+      alert('Please log out and back in, then try deleting again. (' + (e?.code || e?.message || 'error') + ')')
+    }
+  }
 
   const stats = useMemo(() => {
     const read = state.read.map((r) => ({ ...r, book: getBook(r.id) })).filter((r) => r.book)
@@ -65,10 +80,10 @@ export default function Profile({ onAdd, onOpenBook }) {
       </div>
 
       <div className="profile-head">
-        <div className="big-avatar">M</div>
-        <div>
-          <h2>Maia</h2>
-          <div className="handle">@maia · bookworm</div>
+        <div className="big-avatar">{displayName[0]?.toUpperCase()}</div>
+        <div style={{ minWidth: 0 }}>
+          <h2>{displayName}</h2>
+          <div className="handle" style={{ wordBreak: 'break-all' }}>{handle}</div>
         </div>
       </div>
 
@@ -133,6 +148,24 @@ export default function Profile({ onAdd, onOpenBook }) {
               <div className="bn">{n}</div>
             </div>
           ))}
+          {isFirebaseConfigured && (
+            <>
+              <div className="section-h">Account</div>
+              <div style={{ padding: '4px 18px 8px', color: 'var(--muted)', fontSize: 13 }}>
+                Signed in as {handle}
+              </div>
+              <div style={{ padding: '0 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <button className="btn ghost" onClick={() => signOut()}>Log out</button>
+                <button
+                  className="btn ghost"
+                  style={{ color: 'var(--bad)' }}
+                  onClick={handleDelete}
+                >
+                  Delete account
+                </button>
+              </div>
+            </>
+          )}
           <div style={{ height: 20 }} />
         </>
       ) : (

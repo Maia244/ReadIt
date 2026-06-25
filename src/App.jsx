@@ -5,7 +5,10 @@ import Leaderboard from './screens/Leaderboard.jsx'
 import Profile from './screens/Profile.jsx'
 import RankFlow from './components/RankFlow.jsx'
 import BookDetail from './components/BookDetail.jsx'
+import Login from './screens/Login.jsx'
 import { actions } from './data/store.js'
+import { useAuth } from './auth/AuthContext.jsx'
+import { isFirebaseConfigured } from './auth/firebase.js'
 import { IconHome, IconSearch, IconTrophy, IconUser, IconPlus } from './components/icons.jsx'
 
 // Beli's bottom nav: Feed · Search · ＋ · Leaderboard · Profile.
@@ -18,6 +21,7 @@ const NAV = [
 ]
 
 export default function App() {
+  const { user, loading } = useAuth()
   const [tab, setTab] = useState('feed')
   // The book currently being ranked (opens the RankFlow sheet).
   const [ranking, setRanking] = useState(null)
@@ -39,6 +43,20 @@ export default function App() {
   function openBook(book) {
     actions.cacheBook(book)
     setDetail(book)
+  }
+
+  // Auth gate: require an account before using the app (when configured).
+  if (isFirebaseConfigured) {
+    if (loading) {
+      return (
+        <div className="phone">
+          <div className="auth">
+            <div className="auth-logo">lit</div>
+          </div>
+        </div>
+      )
+    }
+    if (!user) return <Login />
   }
 
   return (
