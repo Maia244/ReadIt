@@ -2,7 +2,7 @@ const { Resvg } = require('@resvg/resvg-js')
 const { PNG } = require('pngjs')
 const fs = require('fs')
 
-const W = 1320, H = 2868
+const W = 1284, H = 2778
 const NAVY = '#1b2a6b', NAVY2 = '#33459e', INK = '#14182b', MUTED = '#6b7280', LINE = '#e8eaf2'
 const FONTS = ['/tmp/fonts/Inter-Regular.ttf', '/tmp/fonts/Inter-Bold.ttf', '/tmp/fonts/Inter-ExtraBold.ttf', '/tmp/fonts/Fraunces-Italic.ttf']
 
@@ -14,7 +14,7 @@ function scoreColor(s) {
 }
 
 // Phone screen geometry
-const SX = 150, SY = 690, SW = 1020, SH = 1240, RAD = 72
+const SX = 132, SY = 690, SW = 1020, SH = 1240, RAD = 72
 
 function cover(x, y, w, h, color, title, author) {
   return `
