@@ -37,33 +37,32 @@ workflows:
         script: npm run build
       - name: Sync Capacitor iOS project
         script: npx cap sync ios
-      - name: Set up automatic code signing
+      - name: Sign and build the iOS app (.ipa)
         script: |
-          set -x
+          echo "===== ENV CHECK (lengths only, no secrets) ====="
+          echo "ISSUER_ID length: ${#APP_STORE_CONNECT_ISSUER_ID}"
+          echo "KEY_ID length: ${#APP_STORE_CONNECT_KEY_IDENTIFIER}"
+          echo "PRIVATE_KEY length: ${#APP_STORE_CONNECT_PRIVATE_KEY}"
+          echo "===== INITIALIZE KEYCHAIN ====="
           keychain initialize
+          echo "===== FETCH / CREATE SIGNING FILES ====="
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create \
             --verbose
+          echo "===== ADD CERTIFICATES TO KEYCHAIN ====="
           keychain add-certificates
-          echo "=== Signing identities in keychain ==="
-          security find-identity -v -p codesigning || true
-          echo "=== Provisioning profiles present ==="
-          ls -la "$HOME/Library/MobileDevice/Provisioning Profiles/" || true
+          echo "===== APPLY PROFILES TO PROJECT ====="
           xcode-project use-profiles --verbose
-      - name: Build the iOS app (.ipa)
-        script: |
-          echo "===== SIGNING IDENTITIES (certificates) ====="
+          echo "===== SIGNING IDENTITIES ====="
           security find-identity -v -p codesigning || echo "NO IDENTITIES"
-          echo "===== PROVISIONING PROFILES PRESENT ====="
+          echo "===== PROFILES PRESENT ====="
           ls -la "$HOME/Library/MobileDevice/Provisioning Profiles/" 2>/dev/null || echo "NO PROFILES DIR"
-          echo "===== APP TARGET SIGNING SETTINGS ====="
-          xcodebuild -project "$XCODE_PROJECT" -scheme "$XCODE_SCHEME" -showBuildSettings 2>/dev/null | grep -Ei "PROVISIONING_PROFILE|CODE_SIGN_IDENTITY|CODE_SIGN_STYLE|DEVELOPMENT_TEAM" || true
           echo "===== BUILDING IPA ====="
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME" \
-            --archive-xcargs "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM"
+            --archive-xcargs "DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM"
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
