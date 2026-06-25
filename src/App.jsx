@@ -23,6 +23,8 @@ const NAV = [
 export default function App() {
   const { user, loading } = useAuth()
   const [tab, setTab] = useState('feed')
+  // Bumped each time the + button is tapped, to focus the search box.
+  const [addSignal, setAddSignal] = useState(0)
   // The book currently being ranked (opens the RankFlow sheet).
   const [ranking, setRanking] = useState(null)
   // The book whose detail/consensus sheet is open.
@@ -37,6 +39,12 @@ export default function App() {
     } else {
       setTab('search')
     }
+  }
+
+  // The + button: jump to Search and focus the input ("Add a book").
+  function tapAdd() {
+    setTab('search')
+    setAddSignal((n) => n + 1)
   }
 
   // Tapping a book opens its detail + AI consensus view.
@@ -62,7 +70,7 @@ export default function App() {
   return (
     <div className="phone">
       {tab === 'feed' && <Feed onOpenBook={openBook} />}
-      {tab === 'search' && <Search onAdd={openAdd} onOpenBook={openBook} />}
+      {tab === 'search' && <Search onAdd={openAdd} onOpenBook={openBook} focusSignal={addSignal} />}
       {tab === 'board' && <Leaderboard onOpenBook={openBook} />}
       {tab === 'profile' && <Profile onAdd={openAdd} onOpenBook={openBook} />}
 
@@ -72,7 +80,7 @@ export default function App() {
       <nav className="tabbar">
         {NAV.map((n) =>
           n.center ? (
-            <button key={n.key} className="add" onClick={() => setTab('search')} aria-label="Add a book">
+            <button key={n.key} className="add" onClick={tapAdd} aria-label="Add a book">
               <IconPlus />
             </button>
           ) : (
