@@ -65,6 +65,16 @@ export const PEOPLE = [
 // You already follow the friends whose activity shows up in your feed.
 export const SEED_FOLLOWING = ['u_maya', 'u_jordan', 'u_sam', 'u_priya']
 
+// Notifications (activity about you) shown in the bell panel.
+export const SEED_NOTIFS = [
+  { id: 'n1', user: 'Maya', avatar: '#ff7b00', type: 'like', bookId: 'b2', text: 'liked your rating of', time: '2h' },
+  { id: 'n2', user: 'Jordan', avatar: '#2a9d8f', type: 'follow', text: 'started following you', time: '5h' },
+  { id: 'n3', user: 'Priya', avatar: '#7209b7', type: 'comment', bookId: 'b12', text: 'commented on your rating of', time: '1d' },
+  { id: 'n4', user: 'Sam', avatar: '#9c6644', type: 'rec', bookId: 'b1', text: 'recommended you', time: '1d' },
+  { id: 'n5', user: 'Nina', avatar: '#e63946', type: 'like', bookId: 'b3', text: 'liked your rating of', time: '2d' },
+  { id: 'n6', user: 'Leo', avatar: '#457b9d', type: 'follow', text: 'started following you', time: '3d' },
+]
+
 // Social feed of friends' recent activity.
 export const SEED_FEED = [
   { id: 'f1', user: 'Maya', avatar: '#ff7b00', action: 'ranked', bookId: 'b14', score: 9.2, time: '2h', comment: 'Finally finished Dune — worth every page.' },

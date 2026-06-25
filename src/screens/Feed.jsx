@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useStore, getBook } from '../data/store.js'
 import { Cover, ScoreBadge } from '../components/ui.jsx'
-import { IconHeart, IconComment, IconBookmark } from '../components/icons.jsx'
+import { IconHeart, IconComment, IconBookmark, IconBell } from '../components/icons.jsx'
+import Notifications from '../components/Notifications.jsx'
 
 function actionText(a) {
   if (a === 'ranked') return 'ranked'
@@ -12,13 +13,15 @@ function actionText(a) {
 export default function Feed({ onOpenBook }) {
   const feed = useStore((s) => s.feed)
   const [view, setView] = useState('following')
+  const [showNotifs, setShowNotifs] = useState(false)
 
   return (
     <div className="screen">
       <div className="topbar">
         <div className="wordmark">lit</div>
-        <button className="icon-btn" title="Notifications">
-          <IconHeart />
+        <button className="icon-btn notif-btn" title="Notifications" onClick={() => setShowNotifs(true)}>
+          <IconBell />
+          <span className="notif-dot" />
         </button>
       </div>
 
@@ -68,6 +71,8 @@ export default function Feed({ onOpenBook }) {
         )
       })}
       <div style={{ height: 20 }} />
+
+      {showNotifs && <Notifications onClose={() => setShowNotifs(false)} />}
     </div>
   )
 }

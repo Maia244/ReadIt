@@ -115,6 +115,44 @@ button {
 .topbar .icon-btn:active {
   background: var(--navy-soft);
 }
+.notif-btn {
+  position: relative;
+}
+.notif-dot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--bad);
+  border: 2px solid #fff;
+}
+
+/* Notifications panel rows */
+.notif {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.notif:last-of-type {
+  border-bottom: none;
+}
+.notif-body {
+  flex: 1;
+  min-width: 0;
+}
+.notif-text {
+  font-size: 14px;
+  line-height: 1.35;
+}
+.notif-time {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
 
 /* Feed "Following / For You" toggle, à la Beli */
 .feed-toggle {
