@@ -131,38 +131,44 @@ export default function Search({ onAdd, onOpenBook }) {
                     onClick={() => onOpenBook(b)}
                     stat={
                       rk ? (
-                        <span>
-                          <b style={{ color: scoreColor(rk.score) }}>{rk.score.toFixed(1)}</b> rating · #{rk.rank} overall
-                        </span>
+                        <span>#{rk.rank} overall</span>
                       ) : (
                         <span className="rowstat-muted">Not ranked yet</span>
                       )
                     }
                     right={
-                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                        <button
-                          className={`btn ghost ${onWant ? 'added' : ''}`}
-                          style={{ width: 44, height: 44, padding: 0, flex: '0 0 auto' }}
-                          title="Want to read"
-                          onClick={(ev) => {
-                            ev.stopPropagation()
-                            if (onWant) {
-                              actions.removeFromWant(b.id)
-                            } else {
-                              actions.cacheBook(b)
-                              actions.addToWant(b.id)
-                            }
-                          }}
-                        >
-                          <IconBookmark width={20} height={20} style={{ fill: onWant ? 'var(--navy)' : 'none' }} />
-                        </button>
-                        <button
-                          className="btn"
-                          style={{ width: 'auto', padding: '10px 16px', fontSize: 14 }}
-                          onClick={(ev) => { ev.stopPropagation(); onAdd(b) }}
-                        >
-                          {isRead ? 'Re-rank' : 'Rank'}
-                        </button>
+                      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                        {rk && (
+                          <div className="score" style={{ background: scoreColor(rk.score) }}>
+                            {rk.score.toFixed(1)}
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'stretch' }}>
+                          <button
+                            className="btn"
+                            style={{ width: 'auto', padding: '6px 12px', fontSize: 12 }}
+                            onClick={(ev) => { ev.stopPropagation(); onAdd(b) }}
+                          >
+                            {isRead ? 'Re-rank' : 'Rank'}
+                          </button>
+                          <button
+                            className={`btn ghost ${onWant ? 'added' : ''}`}
+                            style={{ width: 'auto', padding: '6px 12px', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}
+                            title="Want to read"
+                            onClick={(ev) => {
+                              ev.stopPropagation()
+                              if (onWant) {
+                                actions.removeFromWant(b.id)
+                              } else {
+                                actions.cacheBook(b)
+                                actions.addToWant(b.id)
+                              }
+                            }}
+                          >
+                            <IconBookmark width={14} height={14} style={{ fill: onWant ? 'var(--navy)' : 'none' }} />
+                            {onWant ? 'Saved' : 'Want'}
+                          </button>
+                        </div>
                       </div>
                     }
                   />
