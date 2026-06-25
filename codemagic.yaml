@@ -50,9 +50,18 @@ workflows:
           set -e
           echo "===== INITIALIZE KEYCHAIN ====="
           keychain initialize
+          echo "===== PREPARE CERTIFICATE PRIVATE KEY ====="
+          # A private key is required to create/save the signing certificate.
+          # Reuse one if provided (idempotent), otherwise generate a fresh key.
+          if [ -n "$CERTIFICATE_PRIVATE_KEY" ]; then
+            printf '%s' "$CERTIFICATE_PRIVATE_KEY" > /tmp/cert_key.pem
+          else
+            ssh-keygen -t rsa -b 2048 -m PEM -f /tmp/cert_key.pem -q -N ""
+          fi
           echo "===== FETCH / CREATE SIGNING FILES ====="
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
+            --certificate-key @file:/tmp/cert_key.pem \
             --create \
             --verbose
           echo "===== ADD CERTIFICATES TO KEYCHAIN ====="
