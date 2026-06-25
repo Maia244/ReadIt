@@ -1,12 +1,12 @@
 # Codemagic CI/CD — builds, signs, and uploads lit to the App Store with no Mac.
-# Docs: https://docs.codemagic.io/yaml-quick-start/building-a-native-ios-app/
+# Docs: https://docs.codemagic.io/yaml-code-signing/signing-ios/
 #
 # Before your first build, in the Codemagic UI you must:
-#   1. Add an App Store Connect API key under Teams/Personal > Integrations >
-#      Developer Portal, and name it EXACTLY "lit App Store" (or change the
-#      name below to match).
-#   2. That's it — signing certificates and provisioning profiles are created
-#      automatically from the API key. You never touch a Mac.
+#   - Add an App Store Connect API key under Teams > Personal Account >
+#     Integrations > Developer Portal, and name it EXACTLY "lit App Store"
+#     (or change the name below to match).
+# Automatic signing below creates the certificate, provisioning profile, AND
+# registers the bundle id in the Apple Developer Portal for you (--create).
 
 workflows:
   ios-release:
@@ -16,10 +16,8 @@ workflows:
     integrations:
       app_store_connect: lit App Store        # <- must match the API key name in Codemagic
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.maiafrank.lit          # <- your bundle id (also register it in App Store Connect)
       vars:
+        BUNDLE_ID: "com.maiafrank.lit"
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
       node: 20
@@ -31,8 +29,14 @@ workflows:
         script: npm run build
       - name: Sync Capacitor iOS project
         script: npx cap sync ios
-      - name: Set up code signing
-        script: xcode-project use-profiles
+      - name: Set up automatic code signing
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+          keychain add-certificates
+          xcode-project use-profiles
       - name: Build the iOS app (.ipa)
         script: |
           xcode-project build-ipa \
