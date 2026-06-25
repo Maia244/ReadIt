@@ -1,21 +1,28 @@
 # Codemagic CI/CD — builds, signs, and uploads lit to the App Store with no Mac.
 # Docs: https://docs.codemagic.io/yaml-code-signing/signing-ios/
 #
-# Before your first build, in the Codemagic UI you must:
-#   - Add an App Store Connect API key under Teams > Personal Account >
-#     Integrations > Developer Portal, and name it EXACTLY "lit App Store"
-#     (or change the name below to match).
-# Automatic signing below creates the certificate, provisioning profile, AND
-# registers the bundle id in the Apple Developer Portal for you (--create).
+# This config authenticates with App Store Connect via ENVIRONMENT VARIABLES
+# (not a named UI integration), so it works whether your app is under a
+# personal account or a team.
+#
+# Before your first build, in Codemagic add a variable GROUP named "appstore"
+# (App settings > Environment variables) with these three variables — mark
+# each as Secure:
+#   APP_STORE_CONNECT_ISSUER_ID       -> the Issuer ID (UUID) from App Store
+#                                        Connect > Users and Access > Integrations
+#   APP_STORE_CONNECT_KEY_IDENTIFIER  -> the Key ID of your API key
+#   APP_STORE_CONNECT_PRIVATE_KEY     -> the FULL contents of the .p8 file,
+#                                        including the BEGIN/END lines
+# The Codemagic CLI reads these names automatically for both signing and upload.
 
 workflows:
   ios-release:
     name: lit iOS release
     instance_type: mac_mini_m2
     max_build_duration: 60
-    integrations:
-      app_store_connect: lit app             # <- must match the API key name in Codemagic
     environment:
+      groups:
+        - appstore                              # <- the variable group you create in the UI
       vars:
         BUNDLE_ID: "com.maiafrank.lit"
         XCODE_PROJECT: "ios/App/App.xcodeproj"
@@ -47,6 +54,8 @@ workflows:
       - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
-        auth: integration
-        submit_to_testflight: true            # uploads to TestFlight automatically
-        # submit_to_app_store: false          # flip to true once your listing is ready
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true              # uploads to TestFlight automatically
+        # submit_to_app_store: false            # flip to true once your listing is ready
