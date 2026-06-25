@@ -1,9 +1,11 @@
-// Live book catalogue via the Open Library search API (free, no API key).
-// Open Library returns loose "subjects"; we map those into the app's fixed
+// Live book catalogue via the Open Library + Google Books search APIs.
+// Both return loose subjects/categories; we map those into the app's fixed
 // genre + age-group taxonomy so every result fits the lists and filters.
+import { GOOGLE_BOOKS_API_KEY } from './booksApiConfig.js'
 
 const SEARCH_URL = 'https://openlibrary.org/search.json'
 const FIELDS = 'key,title,author_name,first_publish_year,subject,cover_i'
+const GBOOKS_URL = 'https://www.googleapis.com/books/v1/volumes'
 
 // Priority-ordered genre rules — first matching keyword wins.
 const GENRE_RULES = [
@@ -74,14 +76,64 @@ export async function fetchDescription(id, signal) {
   return text.split(/\n+|\(\[source/)[0].trim()
 }
 
-// Search Open Library. Resolves to a list of mapped books, or throws on
-// network/HTTP failure so the caller can fall back to the local catalogue.
-export async function searchBooks(query, signal) {
+// Normalise one Google Books volume into the app's book shape.
+function mapVolume(v) {
+  const info = v.volumeInfo || {}
+  const cats = info.categories || []
+  const img = info.imageLinks || {}
+  const raw = img.thumbnail || img.smallThumbnail || null
+  return {
+    id: 'gb:' + v.id,
+    title: info.title,
+    author: info.authors ? info.authors[0] : 'Unknown',
+    genre: matchRules(cats, GENRE_RULES, 'Literary'),
+    age: matchRules(cats, AGE_RULES, 'Adult'),
+    year: info.publishedDate ? parseInt(info.publishedDate.slice(0, 4), 10) || null : null,
+    cover: hashColor(info.title || 'book'),
+    coverUrl: raw ? raw.replace('http://', 'https://') : null,
+  }
+}
+
+async function searchOpenLibrary(query, signal) {
   const url = `${SEARCH_URL}?q=${encodeURIComponent(query)}&limit=20&fields=${FIELDS}`
   const res = await fetch(url, { signal })
   if (!res.ok) throw new Error(`Open Library HTTP ${res.status}`)
   const data = await res.json()
-  return (data.docs || [])
-    .filter((d) => d.title && d.author_name)
-    .map(mapDoc)
+  return (data.docs || []).filter((d) => d.title && d.author_name).map(mapDoc)
+}
+
+async function searchGoogleBooks(query, signal) {
+  const key = GOOGLE_BOOKS_API_KEY ? `&key=${GOOGLE_BOOKS_API_KEY}` : ''
+  const url = `${GBOOKS_URL}?q=${encodeURIComponent(query)}&maxResults=20&printType=books${key}`
+  const res = await fetch(url, { signal })
+  if (!res.ok) throw new Error(`Google Books HTTP ${res.status}`)
+  const data = await res.json()
+  return (data.items || []).filter((v) => v.volumeInfo && v.volumeInfo.title).map(mapVolume)
+}
+
+const dedupeKey = (b) => `${b.title}`.toLowerCase().trim() + '|' + `${b.author}`.toLowerCase().trim()
+
+// Search both sources in parallel and merge. Open Library results come first
+// (good covers); Google Books fills in anything missing — especially new
+// releases. Throws only if BOTH sources fail (so the caller can fall back to
+// the built-in catalogue).
+export async function searchBooks(query, signal) {
+  const [ol, gb] = await Promise.allSettled([
+    searchOpenLibrary(query, signal),
+    searchGoogleBooks(query, signal),
+  ])
+  if (ol.status === 'rejected' && gb.status === 'rejected') {
+    throw ol.reason || gb.reason || new Error('Book search failed')
+  }
+  const merged = []
+  const seen = new Set()
+  for (const list of [ol.value || [], gb.value || []]) {
+    for (const b of list) {
+      const k = dedupeKey(b)
+      if (seen.has(k)) continue
+      seen.add(k)
+      merged.push(b)
+    }
+  }
+  return merged
 }
