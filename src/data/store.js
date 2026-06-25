@@ -69,6 +69,28 @@ export function getUser(id) {
   return peopleById[id]
 }
 
+// Community rating + overall rank for every book that has any scores
+// (your ranks + friends' feed scores). Returns { [id]: { score, rank } }.
+export function bookRankings() {
+  const agg = {}
+  const add = (id, s) => {
+    if (s == null) return
+    if (!agg[id]) agg[id] = { total: 0, n: 0 }
+    agg[id].total += s
+    agg[id].n += 1
+  }
+  state.read.forEach((r) => add(r.id, r.score))
+  SEED_FEED.forEach((f) => add(f.bookId, f.score))
+  const ranked = Object.entries(agg)
+    .map(([id, a]) => ({ id, score: a.total / a.n }))
+    .sort((x, y) => y.score - x.score)
+  const map = {}
+  ranked.forEach((e, i) => {
+    map[e.id] = { score: e.score, rank: i + 1 }
+  })
+  return map
+}
+
 // Shared singleton so every screen sees the same state without a context tree.
 let state = load()
 const listeners = new Set()

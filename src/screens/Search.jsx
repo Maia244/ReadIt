@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CATALOG, PEOPLE } from '../data/seed.js'
 import { searchBooks } from '../data/booksApi.js'
-import { useStore, actions } from '../data/store.js'
-import { GENRES, AGE_GROUPS } from '../data/constants.js'
+import { useStore, actions, bookRankings } from '../data/store.js'
+import { GENRES, AGE_GROUPS, scoreColor } from '../data/constants.js'
 import { BookRow } from '../components/ui.jsx'
 import { IconBookmark } from '../components/icons.jsx'
 import UserSheet from '../components/UserSheet.jsx'
@@ -24,6 +24,7 @@ export default function Search({ onAdd, onOpenBook }) {
   const read = useStore((s) => s.read)
   const following = useStore((s) => s.following)
   const readIds = useMemo(() => new Set(read.map((r) => r.id)), [read])
+  const rankings = useMemo(() => bookRankings(), [read])
 
   // Debounced live book search.
   useEffect(() => {
@@ -122,11 +123,21 @@ export default function Search({ onAdd, onOpenBook }) {
               bookResults.map((b) => {
                 const isRead = readIds.has(b.id)
                 const onWant = want.includes(b.id)
+                const rk = rankings[b.id]
                 return (
                   <BookRow
                     key={b.id}
                     book={b}
                     onClick={() => onOpenBook(b)}
+                    stat={
+                      rk ? (
+                        <span>
+                          <b style={{ color: scoreColor(rk.score) }}>{rk.score.toFixed(1)}</b> rating · #{rk.rank} overall
+                        </span>
+                      ) : (
+                        <span className="rowstat-muted">Not ranked yet</span>
+                      )
+                    }
                     right={
                       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                         <button

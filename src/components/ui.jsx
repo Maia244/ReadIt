@@ -38,8 +38,8 @@ export function Cover({ book, w = 46, h = 68, showText = true }) {
   )
 }
 
-// One book row used in lists. `score` optional; `rank` optional.
-export function BookRow({ book, score, rank, note, onClick, right }) {
+// One book row used in lists. `score`, `rank`, `stat` all optional.
+export function BookRow({ book, score, rank, note, stat, onClick, right }) {
   return (
     <div className="row" onClick={onClick}>
       {rank != null && <div className="rank">{rank}</div>}
@@ -51,6 +51,7 @@ export function BookRow({ book, score, rank, note, onClick, right }) {
           <span className="tag">{book.genre}</span>
           <span className="tag age">{book.age}</span>
         </div>
+        {stat ? <div className="rowstat">{stat}</div> : null}
         {note ? <div className="note">“{note}”</div> : null}
       </div>
       {right != null ? right : score != null ? <ScoreBadge score={score} /> : null}

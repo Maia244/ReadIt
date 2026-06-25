@@ -1,34 +1,31 @@
 import { useMemo, useState } from 'react'
-import { CATALOG, SEED_FEED } from '../data/seed.js'
-import { useStore, getBook } from '../data/store.js'
-import { GENRES, AGE_GROUPS } from '../data/constants.js'
-import { BookRow } from '../components/ui.jsx'
+import { PEOPLE } from '../data/seed.js'
+import { useStore } from '../data/store.js'
+import { useAuth } from '../auth/AuthContext.jsx'
+import UserSheet from '../components/UserSheet.jsx'
 
-// A community leaderboard: aggregates your scores + friends' feed scores into
-// a ranked board you can slice by genre and age group.
-export default function Leaderboard({ onOpenBook }) {
-  const [genre, setGenre] = useState(null)
-  const [age, setAge] = useState(null)
+// Top readers — every member ranked by how many books they've read,
+// including you.
+export default function Leaderboard() {
   const read = useStore((s) => s.read)
+  const { user } = useAuth()
+  const [viewUser, setViewUser] = useState(null)
+
+  const me = {
+    id: 'me',
+    name: user?.displayName || (user?.email ? user.email.split('@')[0] : 'You'),
+    handle: user?.email || 'you',
+    avatar: '#1b2a6b',
+    count: read.length,
+    isMe: true,
+  }
 
   const board = useMemo(() => {
-    const agg = {}
-    const add = (id, score) => {
-      if (score == null) return
-      if (!agg[id]) agg[id] = { id, total: 0, n: 0 }
-      agg[id].total += score
-      agg[id].n += 1
-    }
-    read.forEach((r) => add(r.id, r.score))
-    SEED_FEED.forEach((f) => add(f.bookId, f.score))
-
-    return Object.values(agg)
-      .map((a) => ({ id: a.id, avg: a.total / a.n, book: getBook(a.id) }))
-      .filter((a) => a.book)
-      .filter((a) => (genre ? a.book.genre === genre : true))
-      .filter((a) => (age ? a.book.age === age : true))
-      .sort((a, b) => b.avg - a.avg)
-  }, [read, genre, age])
+    const rows = PEOPLE.map((p) => ({ id: p.id, name: p.name, handle: p.handle, avatar: p.avatar, count: p.ranked, person: p }))
+    rows.push(me)
+    return rows.sort((a, b) => b.count - a.count)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [read.length, user])
 
   return (
     <div className="screen">
@@ -36,34 +33,34 @@ export default function Leaderboard({ onOpenBook }) {
         <div className="brand">Leaderboard</div>
       </div>
       <div className="screen-sub" style={{ paddingTop: 12 }}>
-        Top-rated books across lit — filter by genre or age group.
-      </div>
-
-      <div className="chips">
-        <button className={`chip ${!genre && !age ? 'active' : ''}`} onClick={() => { setGenre(null); setAge(null) }}>
-          All
-        </button>
-        {GENRES.map((g) => (
-          <button key={g} className={`chip ${genre === g ? 'active' : ''}`} onClick={() => setGenre(genre === g ? null : g)}>
-            {g}
-          </button>
-        ))}
-        {AGE_GROUPS.map((a) => (
-          <button key={a} className={`chip ${age === a ? 'active' : ''}`} onClick={() => setAge(age === a ? null : a)}>
-            {a}
-          </button>
-        ))}
+        Top readers — ranked by books read.
       </div>
 
       <div className="rows">
-        {board.length === 0 ? (
-          <div className="empty">No ranked books in this slice yet.</div>
-        ) : (
-          board.map((e, i) => (
-            <BookRow key={e.id} book={e.book} rank={i + 1} score={e.avg} onClick={() => onOpenBook(e.book)} />
-          ))
-        )}
+        {board.map((u, i) => (
+          <div
+            className="row"
+            key={u.id}
+            style={u.isMe ? { background: 'var(--navy-soft)', borderRadius: 12 } : undefined}
+            onClick={() => (u.person ? setViewUser(u.person) : null)}
+          >
+            <div className="rank">{i + 1}</div>
+            <div className="avatar" style={{ background: u.avatar }}>
+              {u.name[0]?.toUpperCase()}
+            </div>
+            <div className="meta">
+              <div className="t">{u.name}{u.isMe ? ' (you)' : ''}</div>
+              <div className="a">@{u.handle}</div>
+            </div>
+            <div className="reader-count">
+              <div className="rc-n">{u.count}</div>
+              <div className="rc-l">books</div>
+            </div>
+          </div>
+        ))}
       </div>
+
+      {viewUser && <UserSheet user={viewUser} onClose={() => setViewUser(null)} />}
     </div>
   )
 }
