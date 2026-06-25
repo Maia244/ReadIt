@@ -85,5 +85,5 @@ workflows:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true              # uploads to TestFlight automatically
+        submit_to_testflight: false             # just upload; build is usable for internal testing
         # submit_to_app_store: false            # flip to true once your listing is ready
