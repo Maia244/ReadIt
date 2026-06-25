@@ -43,6 +43,11 @@ workflows:
           echo "ISSUER_ID length: ${#APP_STORE_CONNECT_ISSUER_ID}"
           echo "KEY_ID length: ${#APP_STORE_CONNECT_KEY_IDENTIFIER}"
           echo "PRIVATE_KEY length: ${#APP_STORE_CONNECT_PRIVATE_KEY}"
+          if [ -z "$APP_STORE_CONNECT_ISSUER_ID" ] || [ -z "$APP_STORE_CONNECT_KEY_IDENTIFIER" ] || [ -z "$APP_STORE_CONNECT_PRIVATE_KEY" ]; then
+            echo "ERROR: App Store Connect credentials are missing. Add APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_KEY_IDENTIFIER and APP_STORE_CONNECT_PRIVATE_KEY to a variable group named 'appstore' (mark them Secure) in the Codemagic UI." >&2
+            exit 1
+          fi
+          set -e
           echo "===== INITIALIZE KEYCHAIN ====="
           keychain initialize
           echo "===== FETCH / CREATE SIGNING FILES ====="
