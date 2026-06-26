@@ -12,9 +12,12 @@ import UserSheet from '../components/UserSheet.jsx'
 export default function Search({ onAdd, onOpenBook }) {
   const [mode, setMode] = useState('books') // books | people
   const [q, setQ] = useState('')
-  const [genre, setGenre] = useState(null)
-  const [age, setAge] = useState(null)
+  const [genres, setGenres] = useState([]) // multi-select
+  const [ages, setAges] = useState([]) // multi-select
   const [viewUser, setViewUser] = useState(null)
+
+  const toggle = (list, setList, v) =>
+    setList(list.includes(v) ? list.filter((x) => x !== v) : [...list, v])
 
   const [results, setResults] = useState(CATALOG) // live or fallback book list
   const [loading, setLoading] = useState(false)
@@ -74,14 +77,15 @@ export default function Search({ onAdd, onOpenBook }) {
     return map
   }, [rankings])
 
-  // Filter, then sort by consensus rating high → low (unrated fall to the end).
+  // Filter (match ANY selected genre AND ANY selected age), then sort by
+  // consensus rating high → low (unrated fall to the end).
   const bookResults = useMemo(() => {
     const scoreOf = (b) => (rankings[b.id] ? rankings[b.id].score : -1)
     return results
-      .filter((b) => (!genre || b.genre === genre) && (!age || b.age === age))
+      .filter((b) => (!genres.length || genres.includes(b.genre)) && (!ages.length || ages.includes(b.age)))
       .slice()
       .sort((a, b) => scoreOf(b) - scoreOf(a))
-  }, [results, genre, age, rankings])
+  }, [results, genres, ages, rankings])
 
   const peopleResults = PEOPLE.filter((p) => {
     const text = `${p.name} ${p.handle} ${p.bio}`.toLowerCase()
@@ -114,16 +118,16 @@ export default function Search({ onAdd, onOpenBook }) {
       {mode === 'books' ? (
         <>
           <div className="chips">
-            <button className={`chip ${!genre && !age ? 'active' : ''}`} onClick={() => { setGenre(null); setAge(null) }}>
+            <button className={`chip ${!genres.length && !ages.length ? 'active' : ''}`} onClick={() => { setGenres([]); setAges([]) }}>
               All
             </button>
             {GENRES.map((g) => (
-              <button key={g} className={`chip ${genre === g ? 'active' : ''}`} onClick={() => setGenre(genre === g ? null : g)}>
+              <button key={g} className={`chip ${genres.includes(g) ? 'active' : ''}`} onClick={() => toggle(genres, setGenres, g)}>
                 {g}
               </button>
             ))}
             {AGE_GROUPS.map((a) => (
-              <button key={a} className={`chip ${age === a ? 'active' : ''}`} onClick={() => setAge(age === a ? null : a)}>
+              <button key={a} className={`chip ${ages.includes(a) ? 'active' : ''}`} onClick={() => toggle(ages, setAges, a)}>
                 {a}
               </button>
             ))}
@@ -150,7 +154,9 @@ export default function Search({ onAdd, onOpenBook }) {
                     stat={
                       rk ? (
                         <span>
-                          {genre ? `#${genreRanks[b.id] ?? '–'} in ${b.genre}` : `#${rk.rank} overall`}
+                          {genres.length === 1
+                            ? `#${genreRanks[b.id] ?? '–'} in ${b.genre}`
+                            : `#${rk.rank} overall`}
                         </span>
                       ) : (
                         <span className="rowstat-muted">Not ranked yet</span>

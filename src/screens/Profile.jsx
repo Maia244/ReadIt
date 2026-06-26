@@ -20,10 +20,13 @@ export default function Profile({ onAdd, onOpenBook }) {
   const state = useStore()
   const { user } = useAuth()
   const [tab, setTab] = useState('read')
-  const [genre, setGenre] = useState(null)
-  const [age, setAge] = useState(null)
+  const [genres, setGenres] = useState([]) // multi-select
+  const [ages, setAges] = useState([]) // multi-select
   const [showSettings, setShowSettings] = useState(false)
   const fileRef = useRef(null)
+
+  const toggle = (list, setList, v) =>
+    setList(list.includes(v) ? list.filter((x) => x !== v) : [...list, v])
 
   const displayName = user?.displayName || (user?.email ? user.email.split('@')[0] : 'Reader')
   const handle = user?.email || '@reader'
@@ -57,8 +60,8 @@ export default function Profile({ onAdd, onOpenBook }) {
   }, [state.read])
 
   function matches(book) {
-    if (genre && book.genre !== genre) return false
-    if (age && book.age !== age) return false
+    if (genres.length && !genres.includes(book.genre)) return false
+    if (ages.length && !ages.includes(book.age)) return false
     return true
   }
 
@@ -164,17 +167,17 @@ export default function Profile({ onAdd, onOpenBook }) {
       ) : (
         <>
           <div className="chips">
-            <button className={`chip ${!genre && !age ? 'active' : ''}`} onClick={() => { setGenre(null); setAge(null) }}>
+            <button className={`chip ${!genres.length && !ages.length ? 'active' : ''}`} onClick={() => { setGenres([]); setAges([]) }}>
               All
             </button>
-            {AGE_GROUPS.map((a) => (
-              <button key={a} className={`chip ${age === a ? 'active' : ''}`} onClick={() => setAge(age === a ? null : a)}>
-                {a}
+            {GENRES.map((g) => (
+              <button key={g} className={`chip ${genres.includes(g) ? 'active' : ''}`} onClick={() => toggle(genres, setGenres, g)}>
+                {g}
               </button>
             ))}
-            {GENRES.map((g) => (
-              <button key={g} className={`chip ${genre === g ? 'active' : ''}`} onClick={() => setGenre(genre === g ? null : g)}>
-                {g}
+            {AGE_GROUPS.map((a) => (
+              <button key={a} className={`chip ${ages.includes(a) ? 'active' : ''}`} onClick={() => toggle(ages, setAges, a)}>
+                {a}
               </button>
             ))}
           </div>
