@@ -75,7 +75,7 @@ export async function signOut() {
       /* ignore */
     }
   }
-  return fbSignOut(auth)
+  if (auth) return fbSignOut(auth)
 }
 
 // Required by Apple (Guideline 5.1.1(v)): in-app account deletion.

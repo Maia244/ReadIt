@@ -63,16 +63,16 @@ export default function Settings({ onClose }) {
           </div>
         </div>
 
+        <div className="section-h" style={{ paddingLeft: 0 }}>Account</div>
         {isFirebaseConfigured && (
-          <>
-            <div className="section-h" style={{ paddingLeft: 0 }}>Account</div>
-            <div style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 8 }}>Signed in as {handle}</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <button className="btn ghost" onClick={() => signOut()}>Log out</button>
-              <button className="btn ghost" style={{ color: 'var(--bad)' }} onClick={handleDelete}>Delete account</button>
-            </div>
-          </>
+          <div style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 8 }}>Signed in as {handle}</div>
         )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <button className="btn ghost" onClick={() => signOut()}>Sign out</button>
+          {isFirebaseConfigured && (
+            <button className="btn ghost" style={{ color: 'var(--bad)' }} onClick={handleDelete}>Delete account</button>
+          )}
+        </div>
 
         <div className="section-h" style={{ paddingLeft: 0 }}>App</div>
         <button

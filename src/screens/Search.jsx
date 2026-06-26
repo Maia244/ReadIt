@@ -173,8 +173,8 @@ export default function Search({ onAdd, onOpenBook }) {
                           </button>
                           <button
                             className={`btn ghost ${onWant ? 'added' : ''}`}
-                            style={{ width: 'auto', padding: '6px 12px', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}
-                            title="Want to read"
+                            style={{ width: 'auto', padding: '6px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            title={onWant ? 'Saved to Want to Read' : 'Want to read'}
                             onClick={(ev) => {
                               ev.stopPropagation()
                               if (onWant) {
@@ -185,8 +185,7 @@ export default function Search({ onAdd, onOpenBook }) {
                               }
                             }}
                           >
-                            <IconBookmark width={14} height={14} style={{ fill: onWant ? 'var(--navy)' : 'none' }} />
-                            {onWant ? 'Saved' : 'Want'}
+                            <IconBookmark width={16} height={16} style={{ fill: onWant ? 'var(--navy)' : 'none' }} />
                           </button>
                         </div>
                       </div>
