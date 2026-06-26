@@ -13,9 +13,7 @@ export default function Notifications({ onClose }) {
           const book = n.bookId ? getBook(n.bookId) : null
           return (
             <div className="notif" key={n.id}>
-              <div className="avatar" style={{ background: n.avatar }}>
-                {n.user[0]}
-              </div>
+              <div className="avatar">{n.user[0]}</div>
               <div className="notif-body">
                 <div className="notif-text">
                   <b>{n.user}</b> {n.text}

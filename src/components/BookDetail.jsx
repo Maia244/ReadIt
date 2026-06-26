@@ -113,9 +113,7 @@ export default function BookDetail({ book, onClose, onRank }) {
         ) : (
           reviews.map((r, i) => (
             <div className="review" key={i}>
-              <div className="avatar" style={{ background: avatarColor(r.user) }}>
-                {r.user[0]}
-              </div>
+              <div className="avatar">{r.user[0]}</div>
               <div style={{ flex: 1 }}>
                 <div className="review-top">
                   <b>{r.user}</b>

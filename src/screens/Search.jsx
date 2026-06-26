@@ -210,9 +210,7 @@ export default function Search({ onAdd, onOpenBook }) {
               const isFollowing = following.includes(p.id)
               return (
                 <div className="row" key={p.id} onClick={() => setViewUser(p)}>
-                  <div className="avatar" style={{ background: p.avatar }}>
-                    {p.name[0]}
-                  </div>
+                  <div className="avatar">{p.name[0]}</div>
                   <div className="meta">
                     <div className="t">{p.name}</div>
                     <div className="a">@{p.handle}</div>

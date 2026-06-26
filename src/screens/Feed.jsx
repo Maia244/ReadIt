@@ -126,9 +126,7 @@ export default function Feed({ onOpenBook }) {
         return (
           <div className="feed-card" key={item.id}>
             <div className="feed-head">
-              <div className="avatar" style={{ background: item.avatar }}>
-                {item.user[0]}
-              </div>
+              <div className="avatar">{item.user[0]}</div>
               <div className="who">
                 <div>
                   <b>{item.user}</b> {actionText(item.action)} <b>{book.title}</b>

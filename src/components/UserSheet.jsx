@@ -13,9 +13,7 @@ export default function UserSheet({ user, onClose }) {
         <div className="sheet-grab" />
 
         <div className="user-sheet-head">
-          <div className="avatar lg" style={{ background: user.avatar }}>
-            {user.name[0]}
-          </div>
+          <div className="avatar lg">{user.name[0]}</div>
           <div style={{ flex: 1 }}>
             <h3 style={{ margin: 0 }}>{user.name}</h3>
             <div className="handle">@{user.handle}</div>

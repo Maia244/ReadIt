@@ -34,9 +34,7 @@ export default function Comments({ item, onClose }) {
             {c.mine && photo ? (
               <img className="avatar" src={photo} alt="You" style={{ objectFit: 'cover' }} />
             ) : (
-              <div className="avatar" style={{ background: c.mine ? '#aeb6c2' : c.avatar }}>
-                {c.user[0]}
-              </div>
+              <div className="avatar">{c.user[0]}</div>
             )}
             <div className="notif-body">
               <div className="notif-text">

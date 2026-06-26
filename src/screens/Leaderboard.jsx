@@ -49,9 +49,7 @@ export default function Leaderboard() {
             {u.isMe && photo ? (
               <img className="avatar" src={photo} alt="You" style={{ objectFit: 'cover' }} />
             ) : (
-              <div className="avatar" style={{ background: u.avatar }}>
-                {u.name[0]?.toUpperCase()}
-              </div>
+              <div className="avatar">{u.name[0]?.toUpperCase()}</div>
             )}
             <div className="meta">
               <div className="t">{u.name}{u.isMe ? ' (you)' : ''}</div>

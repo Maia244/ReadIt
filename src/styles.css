@@ -466,6 +466,8 @@ button {
   font-weight: 800;
   font-size: 15px;
   flex-shrink: 0;
+  background: #aeb6c2;
+  object-fit: cover;
 }
 .feed-head .who {
   flex: 1;
