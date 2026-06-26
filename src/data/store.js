@@ -23,6 +23,7 @@ function defaultState() {
     feed: [...SEED_FEED],
     following: [...SEED_FOLLOWING],
     books: {}, // id -> book record for any non-catalog (API) book the user touches
+    photo: null, // data-URL of the user's profile picture
   }
 }
 
@@ -131,6 +132,9 @@ export const actions = {
   },
   removeFromWant(id) {
     commit({ ...state, want: state.want.filter((w) => w !== id) })
+  },
+  setPhoto(dataUrl) {
+    commit({ ...state, photo: dataUrl || null })
   },
   toggleFollow(userId) {
     const following = state.following.includes(userId)

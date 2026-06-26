@@ -8,6 +8,7 @@ import UserSheet from '../components/UserSheet.jsx'
 // including you.
 export default function Leaderboard() {
   const read = useStore((s) => s.read)
+  const photo = useStore((s) => s.photo)
   const { user } = useAuth()
   const [viewUser, setViewUser] = useState(null)
 
@@ -45,9 +46,13 @@ export default function Leaderboard() {
             onClick={() => (u.person ? setViewUser(u.person) : null)}
           >
             <div className="rank">{i + 1}</div>
-            <div className="avatar" style={{ background: u.avatar }}>
-              {u.name[0]?.toUpperCase()}
-            </div>
+            {u.isMe && photo ? (
+              <img className="avatar" src={photo} alt="You" style={{ objectFit: 'cover' }} />
+            ) : (
+              <div className="avatar" style={{ background: u.avatar }}>
+                {u.name[0]?.toUpperCase()}
+              </div>
+            )}
             <div className="meta">
               <div className="t">{u.name}{u.isMe ? ' (you)' : ''}</div>
               <div className="a">@{u.handle}</div>

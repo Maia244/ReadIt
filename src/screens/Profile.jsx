@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useStore, getBook, actions } from '../data/store.js'
+import { fileToAvatarDataURL } from '../data/photo.js'
 import { GENRES, AGE_GROUPS } from '../data/constants.js'
 import { BookRow } from '../components/ui.jsx'
 import { IconGear } from '../components/icons.jsx'
+import Settings from '../components/Settings.jsx'
 import { useAuth } from '../auth/AuthContext.jsx'
-import { signOut, deleteAccount, isFirebaseConfigured } from '../auth/firebase.js'
 
 const LIST_TABS = [
   { key: 'read', label: 'Read' },
@@ -21,16 +22,20 @@ export default function Profile({ onAdd, onOpenBook }) {
   const [tab, setTab] = useState('read')
   const [genre, setGenre] = useState(null)
   const [age, setAge] = useState(null)
+  const [showSettings, setShowSettings] = useState(false)
+  const fileRef = useRef(null)
 
   const displayName = user?.displayName || (user?.email ? user.email.split('@')[0] : 'Reader')
   const handle = user?.email || '@reader'
 
-  async function handleDelete() {
-    if (!confirm('Delete your account and all your lists? This cannot be undone.')) return
+  async function onPickPhoto(e) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
     try {
-      await deleteAccount()
-    } catch (e) {
-      alert('Please log out and back in, then try deleting again. (' + (e?.code || e?.message || 'error') + ')')
+      actions.setPhoto(await fileToAvatarDataURL(file))
+    } catch (err) {
+      alert('Could not use that image. Try another one.')
     }
   }
 
@@ -68,19 +73,22 @@ export default function Profile({ onAdd, onOpenBook }) {
     <div className="screen">
       <div className="topbar">
         <div className="wordmark">lit</div>
-        <button
-          className="icon-btn"
-          title="Settings"
-          onClick={() => {
-            if (confirm('Reset lit to demo data?')) actions.reset()
-          }}
-        >
+        <button className="icon-btn" title="Settings" onClick={() => setShowSettings(true)}>
           <IconGear />
         </button>
       </div>
 
+      <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickPhoto} />
+
       <div className="profile-head">
-        <div className="big-avatar">{displayName[0]?.toUpperCase()}</div>
+        <button className="avatar-edit" onClick={() => fileRef.current?.click()} title="Change photo">
+          {state.photo ? (
+            <img className="big-avatar" src={state.photo} alt="Profile" />
+          ) : (
+            <div className="big-avatar">{displayName[0]?.toUpperCase()}</div>
+          )}
+          <span className="avatar-cam">＋</span>
+        </button>
         <div style={{ minWidth: 0 }}>
           <h2>{displayName}</h2>
           <div className="handle" style={{ wordBreak: 'break-all' }}>{handle}</div>
@@ -148,24 +156,9 @@ export default function Profile({ onAdd, onOpenBook }) {
               <div className="bn">{n}</div>
             </div>
           ))}
-          {isFirebaseConfigured && (
-            <>
-              <div className="section-h">Account</div>
-              <div style={{ padding: '4px 18px 8px', color: 'var(--muted)', fontSize: 13 }}>
-                Signed in as {handle}
-              </div>
-              <div style={{ padding: '0 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <button className="btn ghost" onClick={() => signOut()}>Log out</button>
-                <button
-                  className="btn ghost"
-                  style={{ color: 'var(--bad)' }}
-                  onClick={handleDelete}
-                >
-                  Delete account
-                </button>
-              </div>
-            </>
-          )}
+          <div style={{ padding: '12px 18px 0' }}>
+            <button className="btn ghost" onClick={() => setShowSettings(true)}>Settings</button>
+          </div>
           <div style={{ height: 20 }} />
         </>
       ) : (
@@ -227,6 +220,8 @@ export default function Profile({ onAdd, onOpenBook }) {
           </div>
         </>
       )}
+
+      {showSettings && <Settings onClose={() => setShowSettings(false)} />}
     </div>
   )
 }
