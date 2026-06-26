@@ -140,10 +140,7 @@ export default function Feed({ onOpenBook }) {
             <div className="feed-body" onClick={() => onOpenBook(book)} style={{ cursor: 'pointer' }}>
               <Cover book={book} w={52} h={78} />
               <div>
-                <div className="tags">
-                  <span className="tag">{book.genre}</span>
-                  <span className="tag age">{book.age}</span>
-                </div>
+                <div className="tags">{book.genre}, {book.age}</div>
                 {item.comment && <div className="feed-comment">{item.comment}</div>}
               </div>
             </div>

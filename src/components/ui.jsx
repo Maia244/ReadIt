@@ -47,10 +47,7 @@ export function BookRow({ book, score, rank, note, stat, onClick, right }) {
       <div className="meta">
         <div className="t">{book.title}</div>
         <div className="a">{book.author}</div>
-        <div className="tags">
-          <span className="tag">{book.genre}</span>
-          <span className="tag age">{book.age}</span>
-        </div>
+        <div className="tags">{book.genre}, {book.age}</div>
         {stat ? <div className="rowstat">{stat}</div> : null}
         {note ? <div className="note">“{note}”</div> : null}
       </div>

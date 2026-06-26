@@ -53,10 +53,7 @@ export default function BookDetail({ book, onClose, onRank }) {
           <div style={{ flex: 1, minWidth: 0 }}>
             <h3 style={{ margin: 0 }}>{book.title}</h3>
             <div className="handle">{book.author}{book.year ? ` · ${book.year}` : ''}</div>
-            <div className="tags" style={{ marginTop: 8 }}>
-              <span className="tag">{book.genre}</span>
-              <span className="tag age">{book.age}</span>
-            </div>
+            <div className="tags" style={{ marginTop: 8 }}>{book.genre}, {book.age}</div>
             {community != null && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12 }}>
                 <ScoreBadge score={community} sm />
