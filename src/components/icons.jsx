@@ -67,6 +67,15 @@ export function IconHeart(p) {
   )
 }
 
+export function IconRefresh(p) {
+  return (
+    <svg {...base} {...p}>
+      <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+      <path d="M21 4v5h-5" />
+    </svg>
+  )
+}
+
 export function IconBell(p) {
   return (
     <svg {...base} {...p}>

@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useStore, getBook, actions } from '../data/store.js'
 import { SEED_FEED, SEED_FORYOU } from '../data/seed.js'
 import { Cover, ScoreBadge } from '../components/ui.jsx'
-import { IconHeart, IconComment, IconBookmark, IconBell } from '../components/icons.jsx'
+import { IconHeart, IconComment, IconBookmark, IconBell, IconRefresh } from '../components/icons.jsx'
 import Notifications from '../components/Notifications.jsx'
 import Comments from '../components/Comments.jsx'
 
@@ -90,6 +90,11 @@ export default function Feed({ onOpenBook }) {
           onClick={() => (view === 'foryou' ? doRefresh() : setView('foryou'))}
         >
           For You
+        </button>
+        <button className="feed-refresh" title="Refresh feed" onClick={doRefresh} disabled={refreshing}>
+          <span className={refreshing ? 'spin' : ''} style={{ display: 'inline-flex' }}>
+            <IconRefresh width={20} height={20} />
+          </span>
         </button>
       </div>
 

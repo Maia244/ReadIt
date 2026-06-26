@@ -185,6 +185,19 @@ button {
   border-radius: 3px;
   background: var(--navy);
 }
+.feed-toggle .feed-refresh {
+  margin-left: auto;
+  color: var(--navy);
+  padding: 0 0 12px;
+  display: flex;
+  align-items: center;
+}
+.feed-toggle .feed-refresh::after {
+  display: none;
+}
+.feed-toggle .feed-refresh:active {
+  opacity: 0.6;
+}
 
 .screen-title {
   font-size: 24px;
