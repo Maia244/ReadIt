@@ -25,6 +25,7 @@ function defaultState() {
     books: {}, // id -> book record for any non-catalog (API) book the user touches
     photo: null, // data-URL of the user's profile picture
     likes: {}, // feed item id -> true when you've liked it
+    userComments: {}, // feed item id -> [{ text, time }] comments you've added
   }
 }
 
@@ -142,6 +143,15 @@ export const actions = {
     if (likes[feedId]) delete likes[feedId]
     else likes[feedId] = true
     commit({ ...state, likes })
+  },
+  addComment(feedId, text) {
+    const t = text.trim()
+    if (!t) return
+    const prev = state.userComments[feedId] || []
+    commit({
+      ...state,
+      userComments: { ...state.userComments, [feedId]: [...prev, { text: t, time: 'now' }] },
+    })
   },
   toggleFollow(userId) {
     const following = state.following.includes(userId)

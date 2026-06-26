@@ -83,3 +83,24 @@ export const SEED_FEED = [
   { id: 'f4', user: 'Priya', avatar: '#7209b7', action: 'ranked', bookId: 'b8', score: 7.9, time: '1d', comment: 'Beautiful but sad.', likes: 15, comments: 4 },
   { id: 'f5', user: 'Maya', avatar: '#ff7b00', action: 'ranked', bookId: 'b20', score: 6.1, time: '2d', comment: 'Spookier than the movie.', likes: 6, comments: 2 },
 ]
+
+// Sample comment threads for feed posts (shown above your own comments).
+export const SEED_COMMENTS = {
+  f1: [
+    { user: 'Jordan', avatar: '#2a9d8f', text: 'Adding this to my list immediately!', time: '1h' },
+    { user: 'Priya', avatar: '#7209b7', text: 'The audiobook is incredible too.', time: '40m' },
+  ],
+  f4: [{ user: 'Sam', avatar: '#9c6644', text: 'This one wrecked me.', time: '20h' }],
+  y1: [{ user: 'Maya', avatar: '#ff7b00', text: 'Madeline Miller can do no wrong.', time: '50m' }],
+  y5: [{ user: 'Alex', avatar: '#1d3557', text: 'Required reading, honestly.', time: '18h' }],
+}
+
+// "For You" discovery feed — trending activity from readers you don't follow.
+export const SEED_FORYOU = [
+  { id: 'y1', user: 'Iris', avatar: '#bc6c25', action: 'ranked', bookId: 'b12', score: 9.3, time: '1h', comment: 'Circe is a masterpiece. New favorite.', likes: 41, comments: 9 },
+  { id: 'y2', user: 'Theo', avatar: '#3a0ca3', action: 'ranked', bookId: 'b20', score: 8.5, time: '3h', comment: 'King at his most terrifying.', likes: 27, comments: 5 },
+  { id: 'y3', user: 'Zoe', avatar: '#52b788', action: 'ranked', bookId: 'b22', score: 9.0, time: '4h', comment: 'Matilda still holds up. Pure magic.', likes: 33, comments: 6 },
+  { id: 'y4', user: 'Alex', avatar: '#1d3557', action: 'ranked', bookId: 'b11', score: 8.1, time: '6h', comment: 'That twist genuinely got me.', likes: 19, comments: 4 },
+  { id: 'y5', user: 'Leo', avatar: '#457b9d', action: 'ranked', bookId: 'b19', score: 8.6, time: '1d', comment: 'Reframed how I think about history.', likes: 52, comments: 12 },
+  { id: 'y6', user: 'Nina', avatar: '#e63946', action: 'ranked', bookId: 'b18', score: 8.8, time: '1d', comment: 'Romantasy done right.', likes: 38, comments: 7 },
+]

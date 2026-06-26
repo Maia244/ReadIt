@@ -422,6 +422,29 @@ button {
   border-color: var(--ink);
 }
 
+/* Pull / tap to refresh indicator */
+.refresh-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow: hidden;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--bg-soft);
+  transition: height 0.15s;
+}
+.refresh-bar .spin {
+  display: inline-block;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ---- Feed ---- */
 .feed-card {
   padding: 16px 18px;
