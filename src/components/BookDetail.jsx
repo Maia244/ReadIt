@@ -79,10 +79,7 @@ export default function BookDetail({ book, onClose, onRank }) {
 
         {consensus && (
           <div className="consensus">
-            <div className="consensus-head">
-              <span className="ai-pill">AI</span>
-              Community consensus
-            </div>
+            <div className="consensus-head">Community consensus</div>
             <p className="consensus-text">{consensus.text}</p>
             <div className="consensus-foot">
               Summarized from {reviews.length || 'all'} reader review{reviews.length === 1 ? '' : 's'} · every voice weighted equally
