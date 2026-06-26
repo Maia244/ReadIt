@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useStore, getBook, actions } from '../data/store.js'
 import { SEED_FEED, SEED_FORYOU } from '../data/seed.js'
 import { Cover, ScoreBadge } from '../components/ui.jsx'
-import { IconHeart, IconComment, IconBookmark, IconBell, IconRefresh } from '../components/icons.jsx'
+import { IconHeart, IconComment, IconBookmark, IconBell } from '../components/icons.jsx'
 import Notifications from '../components/Notifications.jsx'
 import Comments from '../components/Comments.jsx'
 
@@ -43,17 +43,33 @@ export default function Feed({ onOpenBook }) {
     }, 700)
   }
 
-  // ---- pull-to-refresh ----
-  function onTouchStart(e) {
-    startY.current = screenRef.current && screenRef.current.scrollTop <= 0 ? e.touches[0].clientY : null
+  // ---- pull-to-refresh (pointer events: works with mouse drag + touch) ----
+  const dragging = useRef(false)
+  const pullRef = useRef(0)
+
+  function onPointerDown(e) {
+    if (screenRef.current && screenRef.current.scrollTop <= 0 && !refreshing) {
+      startY.current = e.clientY
+      dragging.current = true
+    }
   }
-  function onTouchMove(e) {
-    if (startY.current == null || refreshing) return
-    const dy = e.touches[0].clientY - startY.current
-    if (dy > 0) setPull(Math.min(dy * 0.5, 80))
+  function onPointerMove(e) {
+    if (!dragging.current || refreshing) return
+    const dy = e.clientY - startY.current
+    if (dy > 0 && screenRef.current.scrollTop <= 0) {
+      const p = Math.min(dy * 0.5, 90)
+      pullRef.current = p
+      setPull(p)
+    } else if (dy <= 0) {
+      pullRef.current = 0
+      setPull(0)
+    }
   }
-  function onTouchEnd() {
-    if (pull > 55) doRefresh()
+  function endPull() {
+    if (!dragging.current) return
+    dragging.current = false
+    if (pullRef.current > 55) doRefresh()
+    pullRef.current = 0
     setPull(0)
     startY.current = null
   }
@@ -66,9 +82,12 @@ export default function Feed({ onOpenBook }) {
     <div
       className="screen"
       ref={screenRef}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
+      style={{ userSelect: pull > 0 ? 'none' : undefined }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endPull}
+      onPointerCancel={endPull}
+      onPointerLeave={endPull}
     >
       <div className="topbar">
         <div className="wordmark">lit</div>
@@ -90,11 +109,6 @@ export default function Feed({ onOpenBook }) {
           onClick={() => (view === 'foryou' ? doRefresh() : setView('foryou'))}
         >
           For You
-        </button>
-        <button className="feed-refresh" title="Refresh feed" onClick={doRefresh} disabled={refreshing}>
-          <span className={refreshing ? 'spin' : ''} style={{ display: 'inline-flex' }}>
-            <IconRefresh width={20} height={20} />
-          </span>
         </button>
       </div>
 

@@ -59,6 +59,7 @@ button {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 92px;
+  overscroll-behavior-y: contain;
 }
 
 /* ---- Top bar (white, modern Beli) ---- */
