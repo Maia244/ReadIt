@@ -178,8 +178,7 @@ export default function Search({ onAdd, onOpenBook }) {
                             {isRead ? 'Re-rank' : 'Rank'}
                           </button>
                           <button
-                            className={`btn ghost ${onWant ? 'added' : ''}`}
-                            style={{ width: 'auto', padding: '6px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            style={{ background: 'none', padding: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--navy)' }}
                             title={onWant ? 'Saved to Want to Read' : 'Want to read'}
                             onClick={(ev) => {
                               ev.stopPropagation()
@@ -191,7 +190,7 @@ export default function Search({ onAdd, onOpenBook }) {
                               }
                             }}
                           >
-                            <IconBookmark width={16} height={16} style={{ fill: onWant ? 'var(--navy)' : 'none' }} />
+                            <IconBookmark width={20} height={20} style={{ fill: onWant ? 'var(--navy)' : 'none' }} />
                           </button>
                         </div>
                       </div>
