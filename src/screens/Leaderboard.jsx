@@ -16,7 +16,7 @@ export default function Leaderboard() {
     id: 'me',
     name: user?.displayName || (user?.email ? user.email.split('@')[0] : 'You'),
     handle: user?.email || 'you',
-    avatar: '#1b2a6b',
+    avatar: '#aeb6c2',
     count: read.length,
     isMe: true,
   }

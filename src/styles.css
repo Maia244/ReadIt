@@ -601,7 +601,7 @@ button {
   color: #fff;
   font-size: 30px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+  background: #aeb6c2;
   object-fit: cover;
 }
 .avatar-edit {
