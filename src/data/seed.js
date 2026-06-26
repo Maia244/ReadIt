@@ -77,9 +77,9 @@ export const SEED_NOTIFS = [
 
 // Social feed of friends' recent activity.
 export const SEED_FEED = [
-  { id: 'f1', user: 'Maya', avatar: '#ff7b00', action: 'ranked', bookId: 'b14', score: 9.2, time: '2h', comment: 'Finally finished Dune — worth every page.' },
-  { id: 'f2', user: 'Jordan', avatar: '#2a9d8f', action: 'ranked', bookId: 'b18', score: 8.4, time: '5h', comment: 'ACOTAR fans were right.' },
-  { id: 'f3', user: 'Sam', avatar: '#9c6644', action: 'want', bookId: 'b23', time: '1d', comment: 'Adding this to my list!' },
-  { id: 'f4', user: 'Priya', avatar: '#7209b7', action: 'ranked', bookId: 'b8', score: 7.9, time: '1d', comment: 'Beautiful but sad.' },
-  { id: 'f5', user: 'Maya', avatar: '#ff7b00', action: 'ranked', bookId: 'b20', score: 6.1, time: '2d', comment: 'Spookier than the movie.' },
+  { id: 'f1', user: 'Maya', avatar: '#ff7b00', action: 'ranked', bookId: 'b14', score: 9.2, time: '2h', comment: 'Finally finished Dune — worth every page.', likes: 12, comments: 3 },
+  { id: 'f2', user: 'Jordan', avatar: '#2a9d8f', action: 'ranked', bookId: 'b18', score: 8.4, time: '5h', comment: 'ACOTAR fans were right.', likes: 8, comments: 1 },
+  { id: 'f3', user: 'Sam', avatar: '#9c6644', action: 'want', bookId: 'b23', time: '1d', comment: 'Adding this to my list!', likes: 5, comments: 0 },
+  { id: 'f4', user: 'Priya', avatar: '#7209b7', action: 'ranked', bookId: 'b8', score: 7.9, time: '1d', comment: 'Beautiful but sad.', likes: 15, comments: 4 },
+  { id: 'f5', user: 'Maya', avatar: '#ff7b00', action: 'ranked', bookId: 'b20', score: 6.1, time: '2d', comment: 'Spookier than the movie.', likes: 6, comments: 2 },
 ]

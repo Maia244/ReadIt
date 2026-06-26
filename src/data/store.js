@@ -24,6 +24,7 @@ function defaultState() {
     following: [...SEED_FOLLOWING],
     books: {}, // id -> book record for any non-catalog (API) book the user touches
     photo: null, // data-URL of the user's profile picture
+    likes: {}, // feed item id -> true when you've liked it
   }
 }
 
@@ -135,6 +136,12 @@ export const actions = {
   },
   setPhoto(dataUrl) {
     commit({ ...state, photo: dataUrl || null })
+  },
+  toggleLike(feedId) {
+    const likes = { ...state.likes }
+    if (likes[feedId]) delete likes[feedId]
+    else likes[feedId] = true
+    commit({ ...state, likes })
   },
   toggleFollow(userId) {
     const following = state.following.includes(userId)

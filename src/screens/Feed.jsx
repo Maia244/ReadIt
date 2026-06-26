@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useStore, getBook } from '../data/store.js'
+import { useStore, getBook, actions } from '../data/store.js'
 import { Cover, ScoreBadge } from '../components/ui.jsx'
 import { IconHeart, IconComment, IconBookmark, IconBell } from '../components/icons.jsx'
 import Notifications from '../components/Notifications.jsx'
@@ -12,6 +12,7 @@ function actionText(a) {
 
 export default function Feed({ onOpenBook }) {
   const feed = useStore((s) => s.feed)
+  const likes = useStore((s) => s.likes)
   const [view, setView] = useState('following')
   const [showNotifs, setShowNotifs] = useState(false)
 
@@ -63,9 +64,28 @@ export default function Feed({ onOpenBook }) {
               </div>
             </div>
             <div className="feed-actions">
-              <span><IconHeart width={18} height={18} /> 12</span>
-              <span><IconComment width={18} height={18} /> 3</span>
-              <span style={{ marginLeft: 'auto' }}><IconBookmark width={18} height={18} /></span>
+              {(() => {
+                const liked = !!likes[item.id]
+                const count = (item.likes || 0) + (liked ? 1 : 0)
+                return (
+                  <button
+                    className={`fa-btn ${liked ? 'liked' : ''}`}
+                    onClick={() => actions.toggleLike(item.id)}
+                  >
+                    <IconHeart width={18} height={18} style={{ fill: liked ? 'var(--bad)' : 'none' }} />
+                    {count}
+                  </button>
+                )
+              })()}
+              <span className="fa-btn"><IconComment width={18} height={18} /> {item.comments || 0}</span>
+              <button
+                className="fa-btn"
+                style={{ marginLeft: 'auto' }}
+                title="Want to read"
+                onClick={() => { actions.cacheBook(book); actions.addToWant(book.id) }}
+              >
+                <IconBookmark width={18} height={18} />
+              </button>
             </div>
           </div>
         )

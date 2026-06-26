@@ -474,10 +474,22 @@ button {
   font-size: 13px;
   font-weight: 600;
 }
-.feed-actions span {
+.feed-actions span,
+.feed-actions .fa-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  background: none;
+  padding: 4px;
+}
+.feed-actions .fa-btn:active {
+  opacity: 0.6;
+}
+.feed-actions .fa-btn.liked {
+  color: var(--bad);
 }
 
 /* ---- Bottom nav ---- */
