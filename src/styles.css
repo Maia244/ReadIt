@@ -349,8 +349,8 @@ button {
   flex-shrink: 0;
 }
 .reader-count .rc-n {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--navy);
 }
 .reader-count .rc-l {
